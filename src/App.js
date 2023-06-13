@@ -1,25 +1,72 @@
-import logo from './logo.svg';
-import './App.css';
+import React from 'react';
+import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
+import Login from './Login';
+import HRDashboard from './components/HRDashboard';
+import EmployeeDashboard from './components/EmployeeDashboard';
+import AccountManagerDashboard from './components/AccountManagerDashboard';
+import AdminDashboard from './components/AdminDashboard';
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
-}
+const App = () => {
+  const [userType, setUserType] = useState('');
+  const [expenses, setExpenses] = useState([]);
+
+  const addExpense = (expense) => {
+    const newExpense = {
+      id: Date.now(),
+      description: expense,
+      approved: false,
+      paid: false,
+    };
+    setExpenses([...expenses, newExpense]);
+  };
+
+  const approveExpense = (expenseId) => {
+    const updatedExpenses = expenses.map((expense) => {
+      if (expense.id === expenseId) {
+        return { ...expense, approved: true };
+      }
+      return expense;
+    });
+    setExpenses(updatedExpenses);
+  };
+
+  const markAsPaid = (expenseId) => {
+    const updatedExpenses = expenses.map((expense) => {
+      if (expense.id === expenseId) {
+        return { ...expense, paid: true };
+      }
+      return expense;
+    });
+    setExpenses(updatedExpenses);
+  };
+
+  const renderDashboard = () => {
+    switch (userType) {
+      case 'employee':
+        return <EmployeeDashboard addExpense={addExpense} />;
+      case 'hr':
+        return (
+          <HRDashboard
+            expenses={expenses.filter((expense) => !expense.approved)}
+            approveExpense={approveExpense}
+          />
+        );
+      case 'accountmanager':
+        return (
+          <AccountManagerDashboard
+            expenses={expenses.filter((expense) => expense.approved && !expense.paid)}
+            markAsPaid={markAsPaid}
+          />
+        );
+      case 'admin':
+        return <div>Admin Dashboard</div>;
+      default:
+        return <Login setUserType={setUserType} />;
+    }
+  };
+
+  return <div>{renderDashboard()}</div>;
+};
 
 export default App;
+
