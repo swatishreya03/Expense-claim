@@ -1,72 +1,24 @@
 import React from 'react';
-import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Login from './Login';
-import HRDashboard from './components/HRDashboard';
-import EmployeeDashboard from './components/EmployeeDashboard';
-import AccountManagerDashboard from './components/AccountManagerDashboard';
-import AdminDashboard from './components/AdminDashboard';
+import Profile from './Profile';
 
-const App = () => {
-  const [userType, setUserType] = useState('');
-  const [expenses, setExpenses] = useState([]);
+const App = () => { 
+  return (
+    <Login />
+      
 
-  const addExpense = (expense) => {
-    const newExpense = {
-      id: Date.now(),
-      description: expense,
-      approved: false,
-      paid: false,
-    };
-    setExpenses([...expenses, newExpense]);
-  };
+    /*<Router>
+      <Routes>
+      
+        <Route path="/login" element={Login} />
+        <Route path="/profile" element={Profile} />
+      
+      </Routes>
+       
+    </Router>*/
 
-  const approveExpense = (expenseId) => {
-    const updatedExpenses = expenses.map((expense) => {
-      if (expense.id === expenseId) {
-        return { ...expense, approved: true };
-      }
-      return expense;
-    });
-    setExpenses(updatedExpenses);
-  };
-
-  const markAsPaid = (expenseId) => {
-    const updatedExpenses = expenses.map((expense) => {
-      if (expense.id === expenseId) {
-        return { ...expense, paid: true };
-      }
-      return expense;
-    });
-    setExpenses(updatedExpenses);
-  };
-
-  const renderDashboard = () => {
-    switch (userType) {
-      case 'employee':
-        return <EmployeeDashboard addExpense={addExpense} />;
-      case 'hr':
-        return (
-          <HRDashboard
-            expenses={expenses.filter((expense) => !expense.approved)}
-            approveExpense={approveExpense}
-          />
-        );
-      case 'accountmanager':
-        return (
-          <AccountManagerDashboard
-            expenses={expenses.filter((expense) => expense.approved && !expense.paid)}
-            markAsPaid={markAsPaid}
-          />
-        );
-      case 'admin':
-        return <div>Admin Dashboard</div>;
-      default:
-        return <Login setUserType={setUserType} />;
-    }
-  };
-
-  return <div>{renderDashboard()}</div>;
+  );
 };
 
 export default App;
-

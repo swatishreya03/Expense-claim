@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
-const EmployeeDashboard = ({ addExpense }) => {
+const EmployeeDashboard = ({ expenses, addExpense }) => {
   const [expenseType, setExpenseType] = useState('');
   const [amount, setAmount] = useState('');
   const [bill, setBill] = useState('');
