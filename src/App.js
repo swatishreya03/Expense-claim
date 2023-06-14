@@ -3,20 +3,14 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Login from './Login';
 import Profile from './Profile';
 
-const App = () => { 
+const App = () => {
   return (
-    <Login />
-      
-
-    /*<Router>
+    <Router>
       <Routes>
-      
-        <Route path="/login" element={Login} />
-        <Route path="/profile" element={Profile} />
-      
+        <Route path="/" element={<Login />} />
+        <Route path="/profile" element={<Profile />} />
       </Routes>
-       
-    </Router>*/
+    </Router>
 
   );
 };

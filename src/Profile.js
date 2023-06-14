@@ -7,7 +7,7 @@ import EmployeeDashboard from './components/EmployeeDashboard';
 import AccountManagerDashboard from './components/AccountManagerDashboard';
 //import AdminDashboard from './components/AdminDashboard';
 
-const App = () => {
+const Profile = () => {
   const [userType, setUserType] = useState('');
   const [expenses, setExpenses] = useState([]);
 
@@ -69,5 +69,5 @@ const App = () => {
   return <div>{renderDashboard()}</div>;
 };
 
-export default App;
+export default Profile;
 
