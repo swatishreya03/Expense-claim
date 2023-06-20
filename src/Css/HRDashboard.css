@@ -1,78 +1,18 @@
 /* Dashboard.css */
-.HRdashboard-container {
-    font-family: Arial, sans-serif;
-    color: #333;
-  }
-  
-  .HRdashboard-header {
-    background-color: #2c3e50;
-    color: #fff;
-    padding: 20px;
-  }
-  
-  .HRdashboard-title {
-    font-size: 24px;
-    margin: 0;
-  }
-  
-  .sort-container {
-    margin-top: 20px;
-  }
-  
-  .sort-button {
-    background-color: #3498db;
-    color: #fff;
-    border: none;
-    padding: 10px 20px;
-    margin-right: 10px;
-    cursor: pointer;
-  }
-  
-  .sort-select {
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-  }
-  
-  .total-expenses-container {
-    margin-top: 20px;
-  }
-  
-  .total-expenses-button {
-    background-color: #e74c3c;
-    color: #fff;
-    border: none;
-    padding: 10px 20px;
-    margin-right: 10px;
-    cursor: pointer;
-  }
-  
-  .total-expenses-select {
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-  }
-  
-  .data-table {
-    margin-top: 20px;
-  }
-  
-  .data-table th,
-  .data-table td {
-    padding: 10px;
-  }
-  
-  .data-table th {
-    background-color: #34495e;
-    color: #fff;
-  }
-  
-  .data-table tr:nth-child(even) {
-    background-color: #f2f2f2;
-  }
-  
-  .data-table tr:hover {
-    background-color: #eaeaea;
-  }
-  
-  
+.dashboard-container {
+  font-family: Arial, sans-serif;
+  color: #333;
+  padding: 1rem 0;
+}
+
+.dashboard-header {
+  background-color: #2c3e50;
+  color: #fff;
+  padding: 20px;
+}
+
+.dashboard-title {
+  font-size: 2rem;
+  text-align: center;
+  margin-bottom: 1rem;
+}

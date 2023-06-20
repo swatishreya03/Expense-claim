@@ -1,29 +1,8 @@
 import React, { useState } from 'react';
-import '../Css/EmployeeDashboard.css'; // Import the CSS file for styling
-import AddClaimForm from './AddClaimForm';
 import { Link } from 'react-router-dom';
-import { useEffect } from 'react';
-import { reject } from 'q';
-
 
 const EmployeeDashboard = () => {
   const [claims, setClaims] = useState([]);
-
-
-  // Function to handle claim form submission
-  const handleClaimSubmission = (category, amount, invoice, Mail) => {
-    const newClaim = {
-      category,
-      amount,
-      invoice,
-      Mail,
-      statusHR: false,
-      statusAccM: false,
-      rejected: false
-    };
-
-    setClaims(prevClaims => [...prevClaims, newClaim]);
-  };
 
   return (
     <div className="employee-dashboard">

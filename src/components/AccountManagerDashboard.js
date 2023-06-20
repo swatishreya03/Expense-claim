@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import DataTable from 'react-data-table-component';
 import { useNavigate } from 'react-router-dom';
-import '../Css/HRDashboard.css';
 
 const AMDashboard = () => {
   const [claims, setClaims] = useState([]);
@@ -51,7 +50,7 @@ const AMDashboard = () => {
 
   return (
     <div className="dashboard-container">
-      <h2 className="dashboard-title">Claims Dashboard</h2>
+      <h2 className="dashboard-title">HR Dashboard</h2>
 
       <div className="sort-container">
         <button className="sort-button" onClick={() => handleSortBy('')}>

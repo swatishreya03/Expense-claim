@@ -1,105 +1,149 @@
 import React, { useEffect, useState } from 'react';
 import DataTable from 'react-data-table-component';
 import { useNavigate } from 'react-router-dom';
-import '../Css/HRDashboard.css';
+import { TextField } from '@mui/material'
 
 const HRDashboard = () => {
-  const [claims, setClaims] = useState([]);
-  const [sortBy, setSortBy] = useState('');
-  const [totalExpenses, setTotalExpenses] = useState(0);
+  const [search, setSearch] = useState('')
+  const [claims, setClaims] = useState([
+    {
+      id: 1,
+      employeeId: 10012,
+      category: 'Travel',
+      amount: 1000,
+      expenseDate: '2021-08-01',
+      statusByAM: 'Approved',
+      statusByHR: 'Approved'
+    },
+    {
+      id: 2,
+      employeeId: 10013,
+      category: 'Food',
+      amount: 500,
+      expenseDate: '2021-08-02',
+      statusByAM: 'Approved',
+      statusByHR: 'Approved'
+    },
+  ]);
+  const [baseClaim, setBaseClaim] = useState([
+    {
+      id: 1,
+      category: 'Travel',
+      employeeId: 10012,
+      amount: 1000,
+      expenseDate: '2021-08-01',
+      statusByAM: 'Approved',
+      statusByHR: 'Approved'
+    },
+    {
+      id: 2,
+      employeeId: 10013,
+      category: 'Food',
+      amount: 500,
+      expenseDate: '2021-08-02',
+      statusByAM: 'Approved',
+      statusByHR: 'Approved'
+    },
+  ]);
+
   const navigate = useNavigate();
 
-  useEffect(() => {
-    // Fetch the submitted claims from the server/API
-    fetchClaims();
-  }, []);
+  // useEffect(() => {
+  //   const result = baseClaim.filter((claim) => {
+  //     return claim.id.match(search)
+  //   })
+  //   setClaims(result)
+  // }, [search])
 
-  const fetchClaims = async () => {
-    try {
-      const response = await fetch('/api/claims'); // Replace with your server/API endpoint
-      const data = await response.json();
-      setClaims(data);
-    } catch (error) {
-      console.error('Error fetching claims:', error);
-    }
-  };
+  const acceptClaim = (id) => {
+    console.log(id)
+  }
 
-  const handleSortBy = (value) => {
-    setSortBy(value);
-  };
-
-  const handleTotalExpenses = (value) => {
-    setTotalExpenses(value);
-  };
+  const rejectClaim = (id) => {
+    console.log(id)
+  }
 
   const columns = [
-    { name: 'S.no.', selector: 'id', sortable: true },
-    { name: 'Category', selector: 'category', sortable: true },
-    { name: 'Amount', selector: 'amount', sortable: true },
-    { name: 'Expense Date', selector: 'expenseDate', sortable: true },
-    { name: 'Status', selector: 'status', sortable: true },
-    { name: 'Add Comment', selector: 'comment', sortable: true },
-    { name: 'Paid By', selector: 'paidBy', sortable: true },
-    { name: 'AM Status', selector: 'amStatus', sortable: true },
-    { name: 'AM Comment', selector: 'amComment', sortable: true },
-  ];
+    {
+      name: 'Employee ID',
+      selector: (row) => row.employeeId,
+      sortable: true
+    },
+    {
+      name: 'Category',
+      selector: (row) => row.category,
+      sortable: true
+    },
+    {
+      name: 'Amount',
+      selector: (row) => row.amount,
+      sortable: true
+    },
+    {
+      name: 'Expense Date',
+      selector: (row) => row.expenseDate,
+      sortable: true
+    },
+    {
+      name: 'Account Manager Status',
+      selector: (row) => row.statusByAM,
+      sortable: true
+    },
+    {
+      name: 'HR Status',
+      selector: (row) => row.statusByHR,
+      sortable: true
+    },
+    {
+      name: 'Actions',
+      cell: (row) => (
+        <div>
+          <button
+            className="action-button"
+            onClick={() => acceptClaim(row.id)}
+          >
+            Accept
+          </button >
 
-  const filteredClaims = claims.filter((claim) => {
-    if (sortBy === '') return true;
-    return claim.status === sortBy;
-  });
+          <button
+            className="action-button"
+            onClick={() => rejectClaim(row.id)}
+          >
+            Reject
+          </button >
+        </div>
+      ),
+
+      ignoreRowClick: true,
+      allowOverflow: true,
+      button: true
+    }
+  ];
 
   return (
     <div className="dashboard-container">
-      <h2 className="dashboard-title">Claims Dashboard</h2>
-
-      <div className="sort-container">
-        <button className="sort-button" onClick={() => handleSortBy('')}>
-          Sort By
-        </button>
-        {sortBy && (
-          <select
-            className="sort-select"
-            value={sortBy}
-            onChange={(e) => handleSortBy(e.target.value)}
-          >
-            <option value="">All</option>
-            <option value="pending">Pending</option>
-            <option value="approved">Approved</option>
-            <option value="paid">Paid</option>
-          </select>
-        )}
-      </div>
-
-      <div className="total-expenses-container">
-        <button
-          className="total-expenses-button"
-          onClick={() => handleTotalExpenses('')}
-        >
-          Total Expenses
-        </button>
-        {totalExpenses && (
-          <select
-            className="total-expenses-select"
-            value={totalExpenses}
-            onChange={(e) => handleTotalExpenses(e.target.value)}
-          >
-            <option value="">All</option>
-            <option value="monthly">Monthly</option>
-            <option value="date">Date</option>
-            <option value="month">Month</option>
-          </select>
-        )}
-      </div>
-
+      <h2 className="dashboard-title">HR Dashboard</h2>
       <DataTable
-        className="data-table"
         columns={columns}
-        data={filteredClaims}
-        noHeader
+        data={claims}
         striped
         responsive
         pagination
+        highlightOnHover
+        fixedHeader
+        fixedHeaderScrollHeight='500px'
+        subHeader
+        subHeaderComponent={
+          <TextField
+            id='search'
+            label='Search'
+            type='search'
+            variant='outlined'
+            className='input'
+            size='small'
+            onChange={(e) => setSearch(e.target.value)}
+          />
+        }
       />
     </div>
   );
