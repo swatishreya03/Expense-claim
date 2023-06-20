@@ -3,11 +3,11 @@ import '../Css/EmployeeDashboard.css'; // Import the CSS file for styling
 import AddClaimForm from './AddClaimForm';
 import { Link } from 'react-router-dom';
 import { useEffect } from 'react';
+import { reject } from 'q';
 
 
 const EmployeeDashboard = () => {
   const [claims, setClaims] = useState([]);
-  const [data, setData] = useState([]);
 
 
   // Function to handle claim form submission
@@ -17,24 +17,19 @@ const EmployeeDashboard = () => {
       amount,
       invoice,
       Mail,
-      statusHR: 'Pending',
-      statusAccM: 'Pending'
+      statusHR: false,
+      statusAccM: false,
+      rejected: false
     };
 
     setClaims(prevClaims => [...prevClaims, newClaim]);
   };
-  useEffect(() => {
-    let from_data = [];
-    from_data.push(JSON.parse(localStorage.getItem('from_data')));
-    console.log(from_data);
-    setData(from_data);
-  },[])
 
   return (
     <div className="employee-dashboard">
       <h1>Employee Dashboard</h1>
 
-      <Link to="/AddClaimForm" className="add-claim-button">
+      <Link to="/employee/add-claim" className="add-claim-button">
         Add New Claim
       </Link>
 
@@ -51,26 +46,15 @@ const EmployeeDashboard = () => {
           </tr>
         </thead>
         <tbody>
-          {/* {claims.map((claim, index) => (
-            <tr key={index}>
-              <td>{claim.category}</td>
-              <td>{claim.amount}</td>
-              <td>{claim.invoice}</td>
-              <td>{claim.Mail}</td>
-              <td>{claim.statusHR}</td>
-              <td>{claim.statusAccM}</td>
-            </tr>
-          ))} */}
-          {data.map((claim, index) => {
-
+          {claims && claims.map((claim, index) => {
             return (
               <tr key={index}>
                 <td>{claim.Category}</td>
                 <td>{claim.Amount}</td>
                 <td>{claim.Invoice}</td>
                 <td>{claim.Mail}</td>
-                <td>{claim.statusHR}</td>
-              <td>{claim.statusAccM}</td>
+                <td>{claim.statusHR ? 'Accepted' : 'Rejected'}</td>
+                <td>{claim.statusAccM ? 'Accepted' : 'Rejected'}</td>
               </tr>
             )
           })}

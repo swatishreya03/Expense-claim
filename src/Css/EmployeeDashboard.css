@@ -1,12 +1,8 @@
-/* EmployeeDashboard.css */
-
-body {
-  background-color: #f2f2f2;
-}
-
 .employee-dashboard {
   background-color: #fff;
   padding: 20px;
+  width: 100%;
+  height: 100%;
 }
 
 .employee-dashboard h1 {

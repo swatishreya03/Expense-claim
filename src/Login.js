@@ -1,47 +1,37 @@
 import React, { useState } from 'react';
+import Axios from 'axios';
+import { useNavigate } from 'react-router';
 
 const Login = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
-
+  const navigate = useNavigate();
 
   const handleLogin = async (e) => {
     e.preventDefault();
 
-    try {
-      // Perform login validation using an API request
-      const response = await fetch('/login', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ username, password }),
-      });
-
-      if (response.ok) {
-        const { role } = await response.json();
-
-        // Redirect to respective dashboard based on user role
-        if (role === 'hr') {
-          // Handle HR dashboard redirection
-        } else if (role === 'employee') {
-          // Handle Employee dashboard redirection
-        } else if (role === 'account_manager') {
-          // Handle Account Manager dashboard redirection
-        } else if (role === 'admin') {
-          // Handle Admin dashboard redirection
+    await Axios.post('http://localhost:3001/login', {
+      username: username,
+      password: password,
+    }).then(({ data }) => {
+      if (data.status === 200) {
+        if (data.role === 'employee') {
+          navigate('/employee');
         }
-      } else {
-        alert('Invalid credentials. Please try again.');
+        else if (data.role === 'hr') {
+          navigate('/hr');
+        }
+        else if (data.role === 'accountmanager') {
+          navigate('/account-manager');
+        }
       }
-    } catch (error) {
+    }).catch((error) => {
       console.log(error);
-      alert('An error occurred. Please try again.');
-    }
+    });
   };
 
   return (
-    <div>
+    <div className='login'>
       <h1>Login</h1>
       <form onSubmit={handleLogin}>
         <label htmlFor="username">Username:</label>
