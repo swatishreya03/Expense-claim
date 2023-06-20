@@ -1,0 +1,141 @@
+/* EmployeeDashboard.css */
+
+body {
+  background-color: #f2f2f2;
+}
+
+.employee-dashboard {
+  background-color: #fff;
+  padding: 20px;
+}
+
+.employee-dashboard h1 {
+  font-size: 24px;
+  color: #333;
+  margin-bottom: 20px;
+}
+
+.employee-dashboard h2 {
+  font-size: 20px;
+  color: #555;
+  margin-bottom: 10px;
+}
+
+.add-claim-button {
+  display: inline-block;
+  background-color: #0e68d5;
+  color: #fff;
+  padding: 10px 20px;
+  text-decoration: none;
+  border-radius: 5px;
+  margin-bottom: 20px;
+}
+
+.add-claim-button:hover {
+  background-color: #a3bcd5;
+}
+
+.claims-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.claims-table th,
+.claims-table td {
+  padding: 10px;
+  border: 1px solid #ddd;
+}
+
+.claims-table th {
+  background-color: #f5f5f5;
+  font-weight: bold;
+  text-align: left;
+}
+
+.claims-table tbody tr:nth-child(even) {
+  background-color: #f2f2f2;
+}
+
+.claims-table tbody tr:hover {
+  background-color: #e0e0e0;
+}
+
+.claims-table td:last-child {
+  text-align: center;
+}
+
+/* Additional Styles */
+.claims-table td {
+  color: #333;
+}
+
+.add-claim-button:focus,
+.add-claim-button:active {
+  background-color: #58b3f4;
+}
+
+.employee-dashboard a {
+  color: #f0f2f5;
+}
+
+.employee-dashboard a:hover {
+  text-decoration: underline;
+}
+
+/* Media Queries for Responsive Design */
+@media only screen and (max-width: 300px) {
+  .employee-dashboard h1 {
+    font-size: 18px;
+  }
+
+  .employee-dashboard h2 {
+    font-size: 16px;
+  }
+
+  .add-claim-button {
+    font-size: 14px;
+  }
+
+  .claims-table th,
+  .claims-table td {
+    font-size: 12px;
+  }
+}
+
+@media only screen and (max-width: 500px) {
+  .employee-dashboard h1 {
+    font-size: 20px;
+  }
+
+  .employee-dashboard h2 {
+    font-size: 18px;
+  }
+
+  .add-claim-button {
+    font-size: 16px;
+  }
+
+  .claims-table th,
+  .claims-table td {
+    font-size: 14px;
+  }
+}
+
+@media only screen and (max-width: 768px) {
+  .employee-dashboard h1 {
+    font-size: 22px;
+  }
+
+  .employee-dashboard h2 {
+    font-size: 20px;
+  }
+
+  .add-claim-button {
+    font-size: 18px;
+  }
+
+  .claims-table th,
+  .claims-table td {
+    font-size: 16px;
+  }
+}

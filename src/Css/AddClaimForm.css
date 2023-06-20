@@ -1,0 +1,115 @@
+/* AddClaimForm.css */
+
+.add-claim-form {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 30px;
+  background-color: #f9f9f9;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  border-radius: 6px;
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* Center align the form */
+}
+
+.add-claim-form h1 {
+  margin-bottom: 20px;
+  color: #333333;
+  font-size: 28px;
+  text-align: center;
+}
+
+.add-claim-form form {
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* Center align the form elements */
+  width: 100%; /* Set the form width to 100% */
+}
+
+.add-claim-form label {
+  margin-bottom: 10px;
+  color: #555555;
+  font-size: 14px;
+  text-align: center;
+}
+
+.add-claim-form input,
+.add-claim-form select {
+  padding: 8px;
+  margin-bottom: 15px;
+  border: 1px solid #999999;
+  border-radius: 4px;
+  font-size: 14px;
+  color: #333333;
+  width: 100%; /* Set the input width to 100% */
+  box-sizing: border-box; /* Include padding in the width */
+  display: block; /* Display input/select as a block element */
+}
+
+.add-claim-form select {
+  background-color: #eaeaea;
+}
+
+.add-claim-form button {
+  padding: 8px;
+  margin-bottom: 15px;
+  border: none;
+  border-radius: 4px;
+  font-size: 16px;
+  color: #ffffff;
+  background-color: #4caf50;
+  cursor: pointer;
+  width: 100%; /* Set the button width to 100% */
+  box-sizing: border-box; /* Include padding in the width */
+}
+
+.add-claim-form button:hover {
+  background-color: #45a049;
+}
+
+.add-claim-form button:active {
+  background-color: #398038;
+}
+
+/* Additional Styles */
+.add-claim-form input:focus,
+.add-claim-form select:focus,
+.add-claim-form button:focus {
+  outline: none;
+  border-color: #4caf50;
+}
+
+/* Additional Styles for Distance */
+.add-claim-form p {
+  margin-top: 10px;
+  color: #777777;
+  font-size: 14px;
+  text-align: center;
+}
+
+/* Additional Styles for Travel Type and Location */
+.add-claim-form .travel-details {
+  display: flex;
+  flex-direction: column;
+}
+
+.add-claim-form .travel-details label {
+  margin-bottom: 10px;
+  color: #555555;
+  font-size: 14px;
+  text-align: center;
+}
+
+.add-claim-form .travel-details input[type='text'] {
+  padding: 8px;
+  margin-bottom: 15px;
+  border: 1px solid #999999;
+  border-radius: 4px;
+  font-size: 14px;
+  color: #333333;
+  width: 100%;
+  box-sizing: border-box;
+  display: block;
+}
+
+/* Add additional styles and colors as needed */

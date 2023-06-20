@@ -1,89 +1,84 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import '../Css/EmployeeDashboard.css'; // Import the CSS file for styling
+import AddClaimForm from './AddClaimForm';
+import { Link } from 'react-router-dom';
+import { useEffect } from 'react';
 
-const EmployeeDashboard = ({ expenses, addExpense }) => {
-  const [expenseType, setExpenseType] = useState('');
-  const [amount, setAmount] = useState('');
-  const [bill, setBill] = useState('');
 
-  const handleAddExpense = (e) => {
-    e.preventDefault();
-    const newExpense = {
-      id: Date.now(),
-      expenseType,
+const EmployeeDashboard = () => {
+  const [claims, setClaims] = useState([]);
+  const [data, setData] = useState([]);
+
+
+  // Function to handle claim form submission
+  const handleClaimSubmission = (category, amount, invoice, Mail) => {
+    const newClaim = {
+      category,
       amount,
-      bill,
-      hrStatus: 'Pending',
-      accountManagerStatus: 'Pending',
+      invoice,
+      Mail,
+      statusHR: 'Pending',
+      statusAccM: 'Pending'
     };
-    addExpense(newExpense);
-    setExpenseType('');
-    setAmount('');
-    setBill('');
+
+    setClaims(prevClaims => [...prevClaims, newClaim]);
   };
+  useEffect(() => {
+    let from_data = [];
+    from_data.push(JSON.parse(localStorage.getItem('from_data')));
+    console.log(from_data);
+    setData(from_data);
+  },[])
 
   return (
-    <div>
+    <div className="employee-dashboard">
       <h1>Employee Dashboard</h1>
-      <div>
-        <h3>Add New Expense</h3>
-        <form onSubmit={handleAddExpense}>
-          <label>
-            Expense Type:
-            <input
-              type="text"
-              value={expenseType}
-              onChange={(e) => setExpenseType(e.target.value)}
-            />
-          </label>
-          <br />
-          <label>
-            Amount:
-            <input
-              type="text"
-              value={amount}
-              onChange={(e) => setAmount(e.target.value)}
-            />
-          </label>
-          <br />
-          <label>
-            Bill:
-            <input
-              type="file"
-              onChange={(e) => setBill(e.target.files[0])}
-            />
-          </label>
-          <br />
-          <button type="submit">Add Expense</button>
-        </form>
-      </div>
-      <div>
-        <h3>Expense Status</h3>
-        <table>
-          <thead>
-            <tr>
-              <th>Expense Type</th>
-              <th>Amount Claimed</th>
-              <th>Status by HR</th>
-              <th>Status by Account Manager</th>
+
+      <Link to="/AddClaimForm" className="add-claim-button">
+        Add New Claim
+      </Link>
+
+      <h2>Previous Claims</h2>
+      <table className="claims-table">
+        <thead>
+          <tr>
+            <th>Category</th>
+            <th>Amount</th>
+            <th>Invoice</th>
+            <th>Mail</th>
+            <th>Status by HR</th>
+            <th>Status by Acc. M.</th>
+          </tr>
+        </thead>
+        <tbody>
+          {/* {claims.map((claim, index) => (
+            <tr key={index}>
+              <td>{claim.category}</td>
+              <td>{claim.amount}</td>
+              <td>{claim.invoice}</td>
+              <td>{claim.Mail}</td>
+              <td>{claim.statusHR}</td>
+              <td>{claim.statusAccM}</td>
             </tr>
-          </thead>
-          <tbody>
-            {/* Iterate over the expenses and display each row */}
-            {/* Assuming expenses is an array of expense objects */}
-            {expenses.map((expense) => (
-              <tr key={expense.id}>
-                <td>{expense.expenseType}</td>
-                <td>{expense.amount}</td>
-                <td>{expense.hrStatus}</td>
-                <td>{expense.accountManagerStatus}</td>
+          ))} */}
+          {data.map((claim, index) => {
+
+            return (
+              <tr key={index}>
+                <td>{claim.Category}</td>
+                <td>{claim.Amount}</td>
+                <td>{claim.Invoice}</td>
+                <td>{claim.Mail}</td>
+                <td>{claim.statusHR}</td>
+              <td>{claim.statusAccM}</td>
               </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
+            )
+          })}
+        </tbody>
+      </table>
     </div>
   );
 };
 
 export default EmployeeDashboard;
+

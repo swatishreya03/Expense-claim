@@ -11,6 +11,9 @@ const Profile = () => {
   const [userType, setUserType] = useState('');
   const [expenses, setExpenses] = useState([]);
 
+  //const role = "employee"; // Replace with the role of the user  
+
+
   const addExpense = (expense) => {
     const newExpense = {
       id: Date.now(),
