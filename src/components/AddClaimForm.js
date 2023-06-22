@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+//import { geocode, GeocoderTimedOut, geodesic } from 'geopy';
 
 const AddClaimForm = () => {
   const [category, setCategory] = useState('');
@@ -16,7 +17,7 @@ const AddClaimForm = () => {
     },
   });
 
-  const [distance, setDistance] = useState('');
+  //const [distance, setDistance] = useState('');
   //const history = useHistory();
 
 
@@ -53,6 +54,7 @@ const AddClaimForm = () => {
       withinCity: {
         onboardingLocation: '',
         destinationLocation: '',
+        distance: '',
       },
     });
   };
@@ -81,7 +83,7 @@ const AddClaimForm = () => {
           const data = await response.json();
           console.log('Response Data:', data);
           const distanceValue = data.rows[0].elements[0].distance.text;
-          setTravelDetails(prevTravelDetails => ({
+          setTravelDetails((prevTravelDetails) => ({
             ...prevTravelDetails,
             withinCity: {
               ...prevTravelDetails.withinCity,

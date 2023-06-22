@@ -11,6 +11,7 @@ const HRDashboard = () => {
       employeeId: 10012,
       category: 'Travel',
       amount: 1000,
+      policyamount: 1000,
       expenseDate: '2021-08-01',
       statusByAM: 'Approved',
       statusByHR: 'Approved'
@@ -20,6 +21,7 @@ const HRDashboard = () => {
       employeeId: 10013,
       category: 'Food',
       amount: 500,
+      policyamount: '',
       expenseDate: '2021-08-02',
       statusByAM: 'Approved',
       statusByHR: 'Approved'
@@ -55,12 +57,32 @@ const HRDashboard = () => {
   //   setClaims(result)
   // }, [search])
 
+
+
   const acceptClaim = (id) => {
-    console.log(id)
+    const updatedClaims = claims.map((claim) => {
+      if (claim.id === id) {
+        return {
+          ...claim,
+          statusByHR: 'Approved'
+        };
+      }
+      return claim;
+    });
+    setClaims(updatedClaims);
   }
 
   const rejectClaim = (id) => {
-    console.log(id)
+    const updatedClaims = claims.map((claim) => {
+      if (claim.id === id) {
+        return {
+          ...claim,
+          statusByHR: 'Rejected'
+        };
+      }
+      return claim;
+    });
+    setClaims(updatedClaims);
   }
 
   const columns = [
@@ -77,6 +99,11 @@ const HRDashboard = () => {
     {
       name: 'Amount',
       selector: (row) => row.amount,
+      sortable: true
+    },
+    {
+      name: 'Policy Amount',
+      selector: (row) => row.policyamount,
       sortable: true
     },
     {
