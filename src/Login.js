@@ -17,7 +17,6 @@ const Login = () => {
         },
       })
         .then(({ data }) => {
-          console.log(data.message);
           if (data.status === 410) {
             localStorage.removeItem('token');
           }
