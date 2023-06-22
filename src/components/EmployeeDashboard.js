@@ -1,8 +1,42 @@
-import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import Axios from 'axios';
 
 const EmployeeDashboard = () => {
   const [claims, setClaims] = useState([]);
+
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (localStorage.getItem('token')) {
+      Axios.get('http://localhost:3001/auth/', {
+        headers: {
+          authorization: localStorage.getItem('token'),
+        },
+      })
+        .then(({ data }) => {
+          console.log(data.message);
+          if (data.status === 410) {
+            localStorage.removeItem('token');
+            navigate('/');
+          }
+          else if (data.status === 200) {
+            if (data.role === 'hr') {
+              navigate('/hr');
+            }
+            else if (data.role === 'am') {
+              navigate('/account-manager');
+            }
+          }
+        }).catch((error) => {
+          console.log(error);
+        });
+    }
+    else {
+      navigate('/');
+    }
+  }, []);
+
 
   return (
     <div className="employee-dashboard">

@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import DataTable from 'react-data-table-component';
 import { useNavigate } from 'react-router-dom';
 import { TextField } from '@mui/material'
+import Axios from 'axios';
 
 const HRDashboard = () => {
   const [search, setSearch] = useState('')
@@ -48,12 +49,36 @@ const HRDashboard = () => {
 
   const navigate = useNavigate();
 
-  // useEffect(() => {
-  //   const result = baseClaim.filter((claim) => {
-  //     return claim.id.match(search)
-  //   })
-  //   setClaims(result)
-  // }, [search])
+  useEffect(() => {
+    if (localStorage.getItem('token')) {
+      Axios.get('http://localhost:3001/auth/', {
+        headers: {
+          authorization: localStorage.getItem('token'),
+        },
+      })
+        .then(({ data }) => {
+          console.log(data.message);
+          if (data.status === 410) {
+            localStorage.removeItem('token');
+            navigate('/');
+          }
+          else if (data.status === 200) {
+            if (data.role === 'employee') {
+              navigate('/employee');
+            }
+            else if (data.role === 'am') {
+              navigate('/account-manager');
+            }
+          }
+        }).catch((error) => {
+          console.log(error);
+        });
+    }
+    else {
+      navigate('/');
+    }
+  }, []);
+
 
   const acceptClaim = (id) => {
     console.log(id)
