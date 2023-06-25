@@ -46,7 +46,6 @@ const Login = () => {
       email: username,
       password: password,
     }).then(({ data }) => {
-      console.log(data);
       if (data.status === 200) {
         localStorage.setItem('token', data.token);
         if (data.role === 'employee') {

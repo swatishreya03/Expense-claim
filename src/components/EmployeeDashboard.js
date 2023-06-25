@@ -5,29 +5,23 @@ import Topbar from './Topbar';
 import Axios from 'axios';
 
 const EmployeeDashboard = () => {
-  const [claims, setClaims] = useState([
-    {
-      Category: 'Category 1',
-      Amount: 100,
-      Invoice: 'Invoice 1',
-      Mail: 'Mail 1',
-      statusHR: true,
-      statusAccM: true,
-      statusRm: 'Paid',
-    },
-    {
-      Category: 'Category 2',
-      Amount: 200,
-      Invoice: 'Invoice 2',
-      Mail: 'Mail 2',
-      statusHR: false,
-      statusAccM: true,
-      statusRm: 'Pending',
-    },
-    // Add more claim objects as needed
-  ]);
-
+  const [claims, setClaims] = useState([]);
   const navigate = useNavigate();
+
+  const getClaims = (employeeId) => {
+    console.log(employeeId);
+    Axios.get(`http://localhost:3001/claim/get-employee-claims/${employeeId}`, {
+      headers: {
+        authorization: localStorage.getItem('token'),
+      },
+    }).then(({ data }) => {
+      if (data.status === 200) {
+        setClaims(data.claims);
+      }
+    }).catch((error) => {
+      console.log(error);
+    });
+  }
 
   useEffect(() => {
     if (localStorage.getItem('token')) {
@@ -42,11 +36,19 @@ const EmployeeDashboard = () => {
             navigate('/');
           }
           else if (data.status === 200) {
-            if (data.role === 'hr') {
-              navigate('/hr');
+            if (data.role === 'employee') {
+              getClaims(data.id);
             }
-            else if (data.role === 'am') {
-              navigate('/account-manager');
+            else {
+              if (data.role === 'hr') {
+                navigate('/hr');
+              }
+              else if (data.role === 'am') {
+                navigate('/account-manager');
+              }
+              else if (data.role === 'accounts') {
+                navigate('/accounts');
+              }
             }
           }
         }).catch((error) => {
@@ -62,40 +64,28 @@ const EmployeeDashboard = () => {
   const columns = [
     {
       name: 'Category',
-      selector: 'Category',
+      selector: (row) => row.category,
       sortable: true,
 
     },
     {
       name: 'Amount',
-      selector: 'Amount',
+      selector: (row) => row.amount,
       sortable: true,
     },
+    // {
+    //   name: 'Invoice',
+    //   selector: 'Invoice',
+    //   sortable: true,
+    // },
+    // {
+    //   name: 'Mail',
+    //   selector: 'Mail',
+    //   sortable: true,
+    // },
     {
-      name: 'Invoice',
-      selector: 'Invoice',
-      sortable: true,
-    },
-    {
-      name: 'Mail',
-      selector: 'Mail',
-      sortable: true,
-    },
-    {
-      name: 'HR Status',
-      selector: 'statusHR',
-      sortable: true,
-      cell: (row) => (row.statusHR ? 'Accepted' : 'Rejected'),
-    },
-    {
-      name: 'AM Status',
-      selector: 'statusAccM',
-      sortable: true,
-      cell: (row) => (row.statusAccM ? 'Accepted' : 'Rejected'),
-    },
-    {
-      name: 'RM Status',
-      selector: 'statusRm',
+      name: 'Status',
+      selector: (row) => row.rejected ? 'Rejected' : row.approved ? 'Approved' : 'Pending',
       sortable: true,
     },
   ];
@@ -105,19 +95,19 @@ const EmployeeDashboard = () => {
       <Topbar name="Employee Dashboard" />
 
       <div className="employee-dashboard">
-        <h1>Dashboard</h1>
-
         <Link to="/employee/add-claim" className="add-claim-button">
           Add New Claim
         </Link>
 
         <h2>Previous Claims</h2>
         <DataTable
-
           columns={columns}
-
           data={claims}
           pagination
+          responsive
+          highlightOnHover
+          fixedHeader
+          fixedHeaderScrollHeight='500px'
         />
       </div>
     </>

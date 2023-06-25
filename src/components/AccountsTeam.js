@@ -4,55 +4,37 @@ import { useNavigate } from 'react-router-dom';
 import { TextField } from '@mui/material';
 import Topbar from './Topbar';
 import Axios from 'axios';
+import { toast, ToastContainer } from 'react-toastify';
 
 const ACTeams = () => {
   const [search, setSearch] = useState('')
-  const [claims, setClaims] = useState([
-    {
-      id: 1,
-      employeeId: 10012,
-      category: 'Travel',
-      amount: 1000,
-      expenseDate: '2021-08-01',
-      statusByAM: 'Approved',
-      statusByHR: 'Approved',
-      paidByAccounts: true,
-    },
-    {
-      id: 2,
-      employeeId: 10013,
-      category: 'Food',
-      amount: 500,
-      expenseDate: '2021-08-02',
-      statusByAM: 'Approved',
-      statusByHR: 'Approved',
-      paidByAccounts: false,
-    },
-  ]);
-  const [baseClaim, setBaseClaim] = useState([
-    {
-      id: 1,
-      category: 'Travel',
-      employeeId: 10012,
-      amount: 1000,
-      expenseDate: '2021-08-01',
-      statusByAM: 'Approved',
-      statusByHR: 'Approved',
-      paidByAccounts: true,
-    },
-    {
-      id: 2,
-      employeeId: 10013,
-      category: 'Food',
-      amount: 500,
-      expenseDate: '2021-08-02',
-      statusByAM: 'Approved',
-      statusByHR: 'Approved',
-      paidByAccounts: false,
-    },
-  ]);
+  const [claims, setClaims] = useState([]);
+  const [baseClaim, setBaseClaim] = useState([]);
 
   const navigate = useNavigate();
+
+  const getClaims = async () => {
+    await Axios.get(`http://localhost:3001/claim//get-employee-claims-accounts/`, {
+      headers: {
+        authorization: localStorage.getItem('token'),
+      },
+    }).then(({ data }) => {
+      if (data.status === 200) {
+        setClaims(data.claims);
+        setBaseClaim(data.claims);
+      }
+    }).catch((error) => {
+      console.log(error);
+    });
+  }
+
+  useEffect(() => {
+    const result = baseClaim.filter((claim) => {
+      return claim.employeeID.toLowerCase().match(search.toLowerCase())
+    })
+
+    setClaims(result)
+  }, [search])
 
   useEffect(() => {
     if (localStorage.getItem('token')) {
@@ -66,14 +48,19 @@ const ACTeams = () => {
           navigate('/');
         }
         else if (data.status === 200) {
-          if (data.role === 'employee') {
-            navigate('/employee');
+          if (data.role === 'accounts') {
+            getClaims();
           }
-          else if (data.role === 'am') {
-            navigate('/account-manager');
-          }
-          else if (data.role === 'hr') {
-            navigate('/hr');
+          else {
+            if (data.role === 'employee') {
+              navigate('/employee');
+            }
+            else if (data.role === 'am') {
+              navigate('/account-manager');
+            }
+            else if (data.role === 'hr') {
+              navigate('/hr');
+            }
           }
         }
       }).catch((error) => {
@@ -86,30 +73,50 @@ const ACTeams = () => {
   }, []);
 
 
-  const acceptClaim = (id) => {
-    const updatedClaims = claims.map((claim) => {
-      if (claim.id === id) {
-        return {
-          ...claim,
-          paidByAccounts: true
-        };
+  const acceptClaim = async (id) => {
+    await Axios.put(`http://localhost:3001/claim/mrk-paid/${id}`, {
+      headers: {
+        authorization: localStorage.getItem('token'),
+      },
+    }).then(({ data }) => {
+      if (data.status === 200) {
+        toast.success('Claim Marked as Paid!', {
+          position: "top-center",
+          autoClose: 3000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "colored",
+        });
+        getClaims();
       }
-      return claim;
+    }).catch((error) => {
+      console.log(error);
     });
-    setClaims(updatedClaims);
   }
 
-  const rejectClaim = (id) => {
-    const updatedClaims = claims.map((claim) => {
-      if (claim.id === id) {
-        return {
-          ...claim,
-          paidByAccounts: false
-        };
-      }
-      return claim;
+  const rejectClaim = async (id) => {
+    await Axios.put(`http://localhost:3001/claim/reject-accounts/${id}`, {
+      headers: {
+        authorization: localStorage.getItem('token'),
+      },
+    }).then(({ data }) => {
+      toast.success('Claim Rejected Successfully!', {
+        position: "top-center",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+      });
+      getClaims();
+    }).catch((error) => {
+      console.log(error);
     });
-    setClaims(updatedClaims);
   }
 
   const columns = [
@@ -152,21 +159,20 @@ const ACTeams = () => {
       name: 'Actions',
       cell: (row) => (
         <div>
-          {
-            row.paidByAccounts ?
-              <button
-                className="reject-button"
-                onClick={() => rejectClaim(row.id)}
-              >
-                Mark Pending
-              </button > :
-              <button
-                className="accept-button"
-                onClick={() => acceptClaim(row.id)}
-              >
-                Mark Paid
-              </button >
-          }
+
+          <button
+            className="reject-button"
+            onClick={() => rejectClaim(row._id)}
+          >
+            Reject Claim
+          </button >
+          <button
+            className="accept-button"
+            onClick={() => acceptClaim(row._id)}
+          >
+            Mark Paid
+          </button >
+
         </div>
       ),
     }
@@ -174,6 +180,18 @@ const ACTeams = () => {
 
   return (
     <>
+      <ToastContainer
+        position="top-center"
+        autoClose={3000}
+        hideProgressBar={false}
+        newestOnTop
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="colored"
+      />
       <Topbar name="EDUDIGM EXPENSE" />
       <div className="dashboard-container">
         <h2 className="dashboard-title"></h2>
@@ -190,7 +208,7 @@ const ACTeams = () => {
           subHeaderComponent={
             <TextField
               id='search'
-              label='Search'
+              label='Search with Employee ID'
               type='search'
               variant='outlined'
               className='input'
