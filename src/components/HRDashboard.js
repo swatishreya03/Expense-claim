@@ -3,7 +3,7 @@ import DataTable from 'react-data-table-component';
 import { useNavigate } from 'react-router-dom';
 import { TextField } from '@mui/material';
 import Topbar from './Topbar';
-
+import Axios from 'axios';
 
 const HRDashboard = () => {
   const [search, setSearch] = useState('')
@@ -52,12 +52,35 @@ const HRDashboard = () => {
 
   const navigate = useNavigate();
 
-  // useEffect(() => {
-  //   const result = baseClaim.filter((claim) => {
-  //     return claim.id.match(search)
-  //   })
-  //   setClaims(result)
-  // }, [search])
+  useEffect(() => {
+    if (localStorage.getItem('token')) {
+      Axios.get('http://localhost:3001/auth/', {
+        headers: {
+          authorization: localStorage.getItem('token'),
+        },
+      })
+        .then(({ data }) => {
+          if (data.status === 410) {
+            localStorage.removeItem('token');
+            navigate('/');
+          }
+          else if (data.status === 200) {
+            if (data.role === 'employee') {
+              navigate('/employee');
+            }
+            else if (data.role === 'am') {
+              navigate('/account-manager');
+            }
+          }
+        }).catch((error) => {
+          console.log(error);
+        });
+    }
+    else {
+      navigate('/');
+    }
+  }, []);
+
 
 
 
@@ -152,33 +175,33 @@ const HRDashboard = () => {
   return (
     //<topbar>
     <>
-     
-    <Topbar name = "EDUDIGM" />
-    <div className="dashboard-container">
-      <h2 className="dashboard-title"></h2>
-      <DataTable
-        columns={columns}
-        data={claims}
-        striped
-        responsive
-        pagination
-        highlightOnHover
-        fixedHeader
-        fixedHeaderScrollHeight='500px'
-        subHeader
-        subHeaderComponent={
-          <TextField
-            id='search'
-            label='Search'
-            type='search'
-            variant='outlined'
-            className='input'
-            size='small'
-            onChange={(e) => setSearch(e.target.value)}
-          />
-        }
-      />
-    </div>
+
+      <Topbar name="EDUDIGM" />
+      <div className="dashboard-container">
+        <h2 className="dashboard-title"></h2>
+        <DataTable
+          columns={columns}
+          data={claims}
+          striped
+          responsive
+          pagination
+          highlightOnHover
+          fixedHeader
+          fixedHeaderScrollHeight='500px'
+          subHeader
+          subHeaderComponent={
+            <TextField
+              id='search'
+              label='Search'
+              type='search'
+              variant='outlined'
+              className='input'
+              size='small'
+              onChange={(e) => setSearch(e.target.value)}
+            />
+          }
+        />
+      </div>
     </>
   );
 };

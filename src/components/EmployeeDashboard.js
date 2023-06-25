@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import DataTable from 'react-data-table-component';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import Topbar from './Topbar';
+import Axios from 'axios';
 
 const EmployeeDashboard = () => {
   const [claims, setClaims] = useState([
@@ -26,12 +27,41 @@ const EmployeeDashboard = () => {
     // Add more claim objects as needed
   ]);
 
+  useEffect(() => {
+    if (localStorage.getItem('token')) {
+      Axios.get('http://localhost:3001/auth/', {
+        headers: {
+          authorization: localStorage.getItem('token'),
+        },
+      })
+        .then(({ data }) => {
+          if (data.status === 410) {
+            localStorage.removeItem('token');
+            navigate('/');
+          }
+          else if (data.status === 200) {
+            if (data.role === 'hr') {
+              navigate('/hr');
+            }
+            else if (data.role === 'am') {
+              navigate('/account-manager');
+            }
+          }
+        }).catch((error) => {
+          console.log(error);
+        });
+    }
+    else {
+      navigate('/');
+    }
+  }, []);
+
   const columns = [
     {
       name: 'Category',
       selector: 'Category',
       sortable: true,
-      
+
     },
     {
       name: 'Amount',
@@ -80,9 +110,9 @@ const EmployeeDashboard = () => {
 
         <h2>Previous Claims</h2>
         <DataTable
-         
+
           columns={columns}
-          
+
           data={claims}
           pagination
         />
