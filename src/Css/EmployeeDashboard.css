@@ -1,68 +1,58 @@
 .employee-dashboard {
   background-color: #fff;
   padding: 20px;
-  height: 100%;
+  min-height: 100vh; /* Set minimum height to occupy full viewport */
 }
 
 .employee-dashboard h1 {
   font-size: 24px;
   color: #333;
   margin-bottom: 20px;
+  text-align: center; /* Center align the heading */
 }
 
 .employee-dashboard h2 {
   font-size: 20px;
-  color: #555;
+  color: #2d0505;
   margin-bottom: 10px;
+  margin-left: 15px;
 }
 
 .add-claim-button {
   display: inline-block;
-  background-color: #0e68d5;
+  background-color: #46aa1f;
   color: #fff;
-  padding: 10px 20px;
+  padding: 10px 15px;
   text-decoration: none;
   border-radius: 5px;
   margin-bottom: 20px;
+  margin-left: 15px;
+  text-align: center; /* Center align the button text */
 }
 
 .add-claim-button:hover {
-  background-color: #a3bcd5;
+  background-color: #7eaedd;
 }
 
-.claims-table {
+.rdt_TableHeadRow{
   width: 100%;
-  border-collapse: collapse;
 }
 
-.claims-table th,
-.claims-table td {
-  padding: 10px;
-  border: 1px solid #ddd;
-}
-
-.claims-table th {
-  background-color: #f5f5f5;
+.rdt_TableHeadRow {
+  background-color: #d40e0e;
+  padding: 0px;
   font-weight: bold;
   text-align: left;
+  border-bottom: 1px solid #dfdcdc;
 }
 
-.claims-table tbody tr:nth-child(even) {
-  background-color: #f2f2f2;
-}
-
-.claims-table tbody tr:hover {
-  background-color: #e0e0e0;
-}
-
-.claims-table td:last-child {
-  text-align: center;
-}
-
-/* Additional Styles */
-.claims-table td {
+.rdt_TableHeadRow {
+  padding: 0px;
   color: #333;
+  font-size: 14px;
+  
 }
+
 
 .add-claim-button:focus,
 .add-claim-button:active {

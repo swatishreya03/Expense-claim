@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import DataTable from 'react-data-table-component';
 import { useNavigate } from 'react-router-dom';
-import { TextField } from '@mui/material'
+import { TextField } from '@mui/material';
+import Topbar from './Topbar';
 
 const AMDashboard = () => {
   const [search, setSearch] = useState('')
@@ -141,6 +142,8 @@ const AMDashboard = () => {
   ];
 
   return (
+    <>
+    <Topbar name = "EDUDIGM" />
     <div className="dashboard-container">
       <h2 className="dashboard-title">ACCOUNT MANAGER</h2>
       <DataTable
@@ -166,7 +169,9 @@ const AMDashboard = () => {
         }
       />
     </div>
+    </>
   );
+
 };
 
 export default AMDashboard;

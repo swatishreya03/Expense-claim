@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import Topbar from './Topbar';
 //import { geocode, GeocoderTimedOut, geodesic } from 'geopy';
 
 const AddClaimForm = () => {
@@ -116,6 +117,8 @@ const AddClaimForm = () => {
 
   const { distance: travelDistance } = travelDetails.withinCity;
   return (
+    <>
+     <Topbar name = "EDUDIGM" />
     <div className='claim-outer'>
       <div className="add-claim-form">
         <h1>Add New Claim</h1>
@@ -238,6 +241,7 @@ const AddClaimForm = () => {
         </form>
       </div>
     </div>
+    </>
   );
 };
 

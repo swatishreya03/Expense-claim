@@ -4,8 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { TextField } from '@mui/material';
 import Topbar from './Topbar';
 
-
-const HRDashboard = () => {
+const ACTeams = () => {
   const [search, setSearch] = useState('')
   const [claims, setClaims] = useState([
     {
@@ -13,7 +12,6 @@ const HRDashboard = () => {
       employeeId: 10012,
       category: 'Travel',
       amount: 1000,
-      policyamount: 1000,
       expenseDate: '2021-08-01',
       statusByAM: 'Approved',
       statusByHR: 'Approved'
@@ -23,7 +21,6 @@ const HRDashboard = () => {
       employeeId: 10013,
       category: 'Food',
       amount: 500,
-      policyamount: '',
       expenseDate: '2021-08-02',
       statusByAM: 'Approved',
       statusByHR: 'Approved'
@@ -50,7 +47,7 @@ const HRDashboard = () => {
     },
   ]);
 
-  const navigate = useNavigate();
+  //const navigate = useNavigate();
 
   // useEffect(() => {
   //   const result = baseClaim.filter((claim) => {
@@ -59,14 +56,14 @@ const HRDashboard = () => {
   //   setClaims(result)
   // }, [search])
 
-
+  const navigate = useNavigate();
 
   const acceptClaim = (id) => {
     const updatedClaims = claims.map((claim) => {
       if (claim.id === id) {
         return {
           ...claim,
-          statusByHR: 'Approved'
+          statusByAM: 'Approved'
         };
       }
       return claim;
@@ -79,7 +76,7 @@ const HRDashboard = () => {
       if (claim.id === id) {
         return {
           ...claim,
-          statusByHR: 'Rejected'
+          statusByAM: 'Rejected'
         };
       }
       return claim;
@@ -104,11 +101,6 @@ const HRDashboard = () => {
       sortable: true
     },
     {
-      name: 'Policy Amount',
-      selector: (row) => row.policyamount,
-      sortable: true
-    },
-    {
       name: 'Expense Date',
       selector: (row) => row.expenseDate,
       sortable: true
@@ -128,17 +120,17 @@ const HRDashboard = () => {
       cell: (row) => (
         <div>
           <button
-            className="action-button"
-            onClick={() => acceptClaim(row.id)}
+             className="action-button"
+             onClick={() => acceptClaim(row.id)}
+           >
+             Paid
+           </button >
+ 
+           <button
+             className="action-button"
+             onClick={() => rejectClaim(row.id)}
           >
-            Accept
-          </button >
-
-          <button
-            className="reject-button"
-            onClick={() => rejectClaim(row.id)}
-          >
-            Reject
+            Pending
           </button >
         </div>
       ),
@@ -150,10 +142,8 @@ const HRDashboard = () => {
   ];
 
   return (
-    //<topbar>
     <>
-     
-    <Topbar name = "EDUDIGM" />
+    <Topbar name = "EDUDIGM EXPENSE" />
     <div className="dashboard-container">
       <h2 className="dashboard-title"></h2>
       <DataTable
@@ -183,4 +173,4 @@ const HRDashboard = () => {
   );
 };
 
-export default HRDashboard;
+export default ACTeams;

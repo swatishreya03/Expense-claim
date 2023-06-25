@@ -5,11 +5,17 @@ import HRDashboard from './components/HRDashboard';
 import EmployeeDashboard from './components/EmployeeDashboard';
 import AddClaimForm from './components/AddClaimForm';
 import AMDashboard from './components/AccountManagerDashboard';
+import AccountsTeam from './components/AccountsTeam';
+import Topbar from './components/Topbar';
+
+
 import './css/AddClaimForm.css';
 import './css/HRDashboard.css';
 import './css/Login.css';
 import './css/EmployeeDashboard.css';
 import './App.css'
+import './css/Topbar.css';
+import './img/logo/Logo.jpeg';
 
 const App = () => {
   return (
@@ -20,6 +26,8 @@ const App = () => {
         <Route path="/employee" element={<EmployeeDashboard />} />
         <Route path="/hr" element={<HRDashboard />} />
         <Route path="/account-manager" element={<AMDashboard />} />
+        <Route path="/accounts-team" element={<AccountsTeam />} />
+        
       </Routes>
     </Router>
   );

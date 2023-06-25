@@ -1,47 +1,94 @@
 import React, { useState } from 'react';
+import DataTable from 'react-data-table-component';
 import { Link } from 'react-router-dom';
+import Topbar from './Topbar';
 
 const EmployeeDashboard = () => {
-  const [claims, setClaims] = useState([]);
+  const [claims, setClaims] = useState([
+    {
+      Category: 'Category 1',
+      Amount: 100,
+      Invoice: 'Invoice 1',
+      Mail: 'Mail 1',
+      statusHR: true,
+      statusAccM: true,
+      statusRm: 'Paid',
+    },
+    {
+      Category: 'Category 2',
+      Amount: 200,
+      Invoice: 'Invoice 2',
+      Mail: 'Mail 2',
+      statusHR: false,
+      statusAccM: true,
+      statusRm: 'Pending',
+    },
+    // Add more claim objects as needed
+  ]);
+
+  const columns = [
+    {
+      name: 'Category',
+      selector: 'Category',
+      sortable: true,
+      
+    },
+    {
+      name: 'Amount',
+      selector: 'Amount',
+      sortable: true,
+    },
+    {
+      name: 'Invoice',
+      selector: 'Invoice',
+      sortable: true,
+    },
+    {
+      name: 'Mail',
+      selector: 'Mail',
+      sortable: true,
+    },
+    {
+      name: 'HR Status',
+      selector: 'statusHR',
+      sortable: true,
+      cell: (row) => (row.statusHR ? 'Accepted' : 'Rejected'),
+    },
+    {
+      name: 'AM Status',
+      selector: 'statusAccM',
+      sortable: true,
+      cell: (row) => (row.statusAccM ? 'Accepted' : 'Rejected'),
+    },
+    {
+      name: 'RM Status',
+      selector: 'statusRm',
+      sortable: true,
+    },
+  ];
 
   return (
-    <div className="employee-dashboard">
-      <h1>Employee Dashboard</h1>
+    <>
+      <Topbar name="EDUDIGM" />
 
-      <Link to="/employee/add-claim" className="add-claim-button">
-        Add New Claim
-      </Link>
+      <div className="employee-dashboard">
+        <h1>Dashboard</h1>
 
-      <h2>Previous Claims</h2>
-      <table className="claims-table">
-        <thead>
-          <tr>
-            <th>Category</th>
-            <th>Amount</th>
-            <th>Invoice</th>
-            <th>Mail</th>
-            <th>Status by HR</th>
-            <th>Status by Acc. M.</th>
-          </tr>
-        </thead>
-        <tbody>
-          {claims && claims.map((claim, index) => {
-            return (
-              <tr key={index}>
-                <td>{claim.Category}</td>
-                <td>{claim.Amount}</td>
-                <td>{claim.Invoice}</td>
-                <td>{claim.Mail}</td>
-                <td>{claim.statusHR ? 'Accepted' : 'Rejected'}</td>
-                <td>{claim.statusAccM ? 'Accepted' : 'Rejected'}</td>
-              </tr>
-            )
-          })}
-        </tbody>
-      </table>
-    </div>
+        <Link to="/employee/add-claim" className="add-claim-button">
+          Add New Claim
+        </Link>
+
+        <h2>Previous Claims</h2>
+        <DataTable
+         
+          columns={columns}
+          
+          data={claims}
+          pagination
+        />
+      </div>
+    </>
   );
 };
 
 export default EmployeeDashboard;
-
