@@ -64,25 +64,45 @@ const EmployeeDashboard = () => {
   const columns = [
     {
       name: 'Category',
-      selector: (row) => row.category,
+      selector: (row) => row.category === 'other' ? row.otherCategory : row.category,
       sortable: true,
 
     },
     {
       name: 'Amount',
-      selector: (row) => row.amount,
+      selector: (row) => row._id,
       sortable: true,
     },
-    // {
-    //   name: 'Invoice',
-    //   selector: 'Invoice',
-    //   sortable: true,
-    // },
-    // {
-    //   name: 'Mail',
-    //   selector: 'Mail',
-    //   sortable: true,
-    // },
+    {
+      name: 'Invoice',
+      selector: (row) => (
+        <div>
+          <button style={
+            {
+              backgroundColor: 'white',
+              border: 'none',
+              color: 'blue',
+              textDecoration: 'underline',
+              cursor: 'pointer',
+            }}
+            className="invoice-button">View Invoice</button>
+        </div>),
+    },
+    {
+      name: 'Mail',
+      selector: (row) => (
+        <div>
+          <button style={
+            {
+              backgroundColor: 'white',
+              border: 'none',
+              color: 'blue',
+              textDecoration: 'underline',
+              cursor: 'pointer',
+            }}
+            className="mail-button">View Mail</button>
+        </div>),
+    },
     {
       name: 'Status',
       selector: (row) => row.rejected ? 'Rejected' : row.approved ? 'Approved' : 'Pending',

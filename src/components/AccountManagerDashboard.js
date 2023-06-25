@@ -21,6 +21,7 @@ const AMDashboard = () => {
       if (data.status === 200) {
         setClaims(data.claims);
         setBaseClaims(data.claims);
+        console.log(data.claims);
       }
     }).catch((error) => {
       console.log(error);
@@ -70,7 +71,8 @@ const AMDashboard = () => {
   }, []);
 
   const acceptClaim = async (id) => {
-    await Axios.put(`http://localhost:3001/claim/accept-am/${id}`, {
+    console.log(id);
+    await Axios.put(`http://localhost:3001/claim/accept-am/${id}`, {}, {
       headers: {
         authorization: localStorage.getItem('token'),
       },
@@ -94,7 +96,7 @@ const AMDashboard = () => {
   }
 
   const rejectClaim = async (id) => {
-    await Axios.put(`http://localhost:3001/claim/reject-am/${id}`, {
+    await Axios.put(`http://localhost:3001/claim/reject-am/${id}`, {}, {
       headers: {
         authorization: localStorage.getItem('token'),
       },
@@ -120,7 +122,7 @@ const AMDashboard = () => {
   const columns = [
     {
       name: 'Employee ID',
-      selector: (row) => row.employeeId,
+      selector: (row) => row.employeeID,
       sortable: true
     },
     {
@@ -130,13 +132,43 @@ const AMDashboard = () => {
     },
     {
       name: 'Amount',
-      selector: (row) => row.amount,
+      selector: (row) => row.claimAmount,
       sortable: true
     },
     {
-      name: 'Expense Date',
-      selector: (row) => row.expenseDate,
+      name: 'Claim Date',
+      selector: (row) => row.claimDate,
       sortable: true
+    },
+    {
+      name: 'Invoice',
+      selector: (row) => (
+        <div>
+          <button style={
+            {
+              backgroundColor: 'white',
+              border: 'none',
+              color: 'blue',
+              textDecoration: 'underline',
+              cursor: 'pointer',
+            }}
+            className="invoice-button">View Invoice</button>
+        </div>),
+    },
+    {
+      name: 'Mail',
+      selector: (row) => (
+        <div>
+          <button style={
+            {
+              backgroundColor: 'white',
+              border: 'none',
+              color: 'blue',
+              textDecoration: 'underline',
+              cursor: 'pointer',
+            }}
+            className="mail-button">View Mail</button>
+        </div>),
     },
     {
       name: 'Actions',

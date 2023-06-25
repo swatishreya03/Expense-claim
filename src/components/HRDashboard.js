@@ -76,7 +76,7 @@ const HRDashboard = () => {
 
 
   const acceptClaim = async (id) => {
-    await Axios.put(`http://localhost:3001/claim/accept-hr/${id}`, {
+    await Axios.put(`http://localhost:3001/claim/accept-hr/${id}`, {}, {
       headers: {
         authorization: localStorage.getItem('token'),
       },
@@ -110,7 +110,7 @@ const HRDashboard = () => {
 
 
   const rejectClaim = async (id) => {
-    await Axios.put(`http://localhost:3001/claim/reject-hr/${id}`, {
+    await Axios.put(`http://localhost:3001/claim/reject-hr/${id}`, {}, {
       headers: {
         authorization: localStorage.getItem('token'),
       },
@@ -146,7 +146,7 @@ const HRDashboard = () => {
   const columns = [
     {
       name: 'Employee ID',
-      selector: (row) => row.employeeId,
+      selector: (row) => row.employeeID,
       sortable: true
     },
     {
@@ -156,23 +156,48 @@ const HRDashboard = () => {
     },
     {
       name: 'Amount',
-      selector: (row) => row.amount,
+      selector: (row) => row.claimAmount,
       sortable: true
     },
     {
-      name: 'Policy Amount',
-      selector: (row) => row.policyamount,
-      sortable: true
-    },
-    {
-      name: 'Expense Date',
-      selector: (row) => row.expenseDate,
+      name: 'Claim Date',
+      selector: (row) => row.claimDate,
       sortable: true
     },
     {
       name: 'Account Manager Status',
-      selector: (row) => row.statusByAM,
+      selector: (row) => row.statusAM ? 'Accepted' : 'Pending',
       sortable: true
+    },
+    {
+      name: 'Invoice',
+      selector: (row) => (
+        <div>
+          <button style={
+            {
+              backgroundColor: 'white',
+              border: 'none',
+              color: 'blue',
+              textDecoration: 'underline',
+              cursor: 'pointer',
+            }}
+            className="invoice-button">View Invoice</button>
+        </div>),
+    },
+    {
+      name: 'Mail',
+      selector: (row) => (
+        <div>
+          <button style={
+            {
+              backgroundColor: 'white',
+              border: 'none',
+              color: 'blue',
+              textDecoration: 'underline',
+              cursor: 'pointer',
+            }}
+            className="mail-button">View Mail</button>
+        </div>),
     },
     {
       name: 'Actions',
