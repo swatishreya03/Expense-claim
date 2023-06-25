@@ -74,7 +74,7 @@ const ACTeams = () => {
 
 
   const acceptClaim = async (id) => {
-    await Axios.put(`http://localhost:3001/claim/mrk-paid/${id}`, {
+    await Axios.put(`http://localhost:3001/claim/mrk-paid/${id}`, {}, {
       headers: {
         authorization: localStorage.getItem('token'),
       },
@@ -98,7 +98,7 @@ const ACTeams = () => {
   }
 
   const rejectClaim = async (id) => {
-    await Axios.put(`http://localhost:3001/claim/reject-accounts/${id}`, {
+    await Axios.put(`http://localhost:3001/claim/reject-accounts/${id}`, {}, {
       headers: {
         authorization: localStorage.getItem('token'),
       },
