@@ -1,9 +1,14 @@
 /* Dashboard.css */
+.dashboard-outer {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
 .dashboard-container {
   font-family: Arial, sans-serif;
-  color: #333;
   padding: 1rem 0;
-  background-color: floralwhite;
+  width: 100%;
 }
 
 .dashboard-header {
@@ -18,25 +23,24 @@
   margin-bottom: 1rem;
 }
 
-.action-button{
-  display: inline-block;
-  background-color: #9ed446;
-  color: #0c0b0b;
-  padding: 2px, 2px ;
-  text-decoration: none;
-  border-radius: 0px;
-  margin-bottom: 5px;
-  margin-top: 5px;
-  margin-right: 2px;
+.accept-button {
+  background-color: green;
+  padding: 0.5rem;
+  border: none;
+  border-radius: 0.5rem;
+  margin-right: 0.5rem;
+  color: white;
 }
 
-.reject-button{
-  display: inline-block;
-  background-color: #bb111d;
-  color: #f8f2f2;
-  padding: 2px, 2px ;
-  text-decoration: none;
-  border-radius: 0px;
-  margin-bottom: 5px;
-  margin-top: 5px;
+.reject-button {
+  background-color: red;
+  color: white;
+  padding: 0.5rem;
+  border: none;
+  border-radius: 0.5rem;
+}
+
+.accept-buttons {
+  display: flex;
+  justify-content: space-around;
 }

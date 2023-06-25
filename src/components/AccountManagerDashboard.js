@@ -3,6 +3,7 @@ import DataTable from 'react-data-table-component';
 import { useNavigate } from 'react-router-dom';
 import { TextField } from '@mui/material';
 import Topbar from './Topbar';
+import Axios from 'axios';
 
 const AMDashboard = () => {
   const [search, setSearch] = useState('')
@@ -46,17 +47,36 @@ const AMDashboard = () => {
       statusByHR: 'Approved'
     },
   ]);
-
-  //const navigate = useNavigate();
-
-  // useEffect(() => {
-  //   const result = baseClaim.filter((claim) => {
-  //     return claim.id.match(search)
-  //   })
-  //   setClaims(result)
-  // }, [search])
-
   const navigate = useNavigate();
+
+  useEffect(() => {
+    if (localStorage.getItem('token')) {
+      Axios.get('http://localhost:3001/auth/', {
+        headers: {
+          authorization: localStorage.getItem('token'),
+        },
+      }).then(({ data }) => {
+        if (data.status === 410) {
+          localStorage.removeItem('token');
+          navigate('/');
+        }
+        else if (data.status === 200) {
+          if (data.role === 'employee') {
+            navigate('/employee');
+          } else if (data.role === 'hr') {
+            navigate('/hr');
+          }
+          else if (data.role === 'accounts') {
+            navigate('/accounts');
+          }
+        }
+      }).catch((error) => {
+        console.log(error);
+      });
+    } else {
+      navigate('/');
+    }
+  }, []);
 
   const acceptClaim = (id) => {
     const updatedClaims = claims.map((claim) => {
@@ -106,69 +126,54 @@ const AMDashboard = () => {
       sortable: true
     },
     {
-      name: 'Account Manager Status',
-      selector: (row) => row.statusByAM,
-      sortable: true
-    },
-    {
-      name: 'HR Status',
-      selector: (row) => row.statusByHR,
-      sortable: true
-    },
-    {
       name: 'Actions',
       cell: (row) => (
-        <div>
+        <div className='action-buttons'>
           <button
-            className="action-button"
+            className="accept-button"
             onClick={() => acceptClaim(row.id)}
           >
             Accept
           </button >
 
           <button
-            className="action-button"
+            className="reject-button"
             onClick={() => rejectClaim(row.id)}
           >
             Reject
           </button >
         </div>
       ),
-
-      ignoreRowClick: true,
-      allowOverflow: true,
-      button: true
     }
   ];
 
   return (
     <>
-    <Topbar name = "EDUDIGM" />
-    <div className="dashboard-container">
-      <h2 className="dashboard-title">ACCOUNT MANAGER</h2>
-      <DataTable
-        columns={columns}
-        data={claims}
-        striped
-        responsive
-        pagination
-        highlightOnHover
-        fixedHeader
-        fixedHeaderScrollHeight='500px'
-        subHeader
-        subHeaderComponent={
-          <TextField
-            id='search'
-            label='Search'
-            type='search'
-            variant='outlined'
-            className='input'
-            size='small'
-            onChange={(e) => setSearch(e.target.value)}
-          />
-        }
-      />
-    </div>
+      <Topbar name="Account Manager Dashboard" />
+      <div className="dashboard-container">
+        <DataTable
+          columns={columns}
+          data={claims}
+          striped
+          responsive
+          pagination
+          highlightOnHover
+          fixedHeader
+          fixedHeaderScrollHeight='500px'
+          subHeader
+          subHeaderComponent={
+            <TextField
+              id='search'
+              label='Search'
+              type='search'
+              variant='outlined'
+              className='input'
+              size='small'
+              onChange={(e) => setSearch(e.target.value)}
+            />
+          }
+        />
+      </div>
     </>
   );
 

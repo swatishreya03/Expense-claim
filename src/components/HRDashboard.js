@@ -71,6 +71,9 @@ const HRDashboard = () => {
             else if (data.role === 'am') {
               navigate('/account-manager');
             }
+            else if (data.role === 'accounts') {
+              navigate('/accounts');
+            }
           }
         }).catch((error) => {
           console.log(error);
@@ -142,16 +145,11 @@ const HRDashboard = () => {
       sortable: true
     },
     {
-      name: 'HR Status',
-      selector: (row) => row.statusByHR,
-      sortable: true
-    },
-    {
       name: 'Actions',
       cell: (row) => (
-        <div>
+        <div className='action-buttons'>
           <button
-            className="action-button"
+            className="accept-button"
             onClick={() => acceptClaim(row.id)}
           >
             Accept
@@ -164,21 +162,14 @@ const HRDashboard = () => {
             Reject
           </button >
         </div>
-      ),
-
-      ignoreRowClick: true,
-      allowOverflow: true,
-      button: true
+      )
     }
   ];
 
   return (
-    //<topbar>
-    <>
-
-      <Topbar name="EDUDIGM" />
+    <div className='dashboard-outer'>
+      <Topbar name="HR Dashboard" />
       <div className="dashboard-container">
-        <h2 className="dashboard-title"></h2>
         <DataTable
           columns={columns}
           data={claims}
@@ -202,7 +193,7 @@ const HRDashboard = () => {
           }
         />
       </div>
-    </>
+    </div>
   );
 };
 

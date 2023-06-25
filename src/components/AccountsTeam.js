@@ -3,6 +3,7 @@ import DataTable from 'react-data-table-component';
 import { useNavigate } from 'react-router-dom';
 import { TextField } from '@mui/material';
 import Topbar from './Topbar';
+import Axios from 'axios';
 
 const ACTeams = () => {
   const [search, setSearch] = useState('')
@@ -14,7 +15,8 @@ const ACTeams = () => {
       amount: 1000,
       expenseDate: '2021-08-01',
       statusByAM: 'Approved',
-      statusByHR: 'Approved'
+      statusByHR: 'Approved',
+      paidByAccounts: true,
     },
     {
       id: 2,
@@ -23,7 +25,8 @@ const ACTeams = () => {
       amount: 500,
       expenseDate: '2021-08-02',
       statusByAM: 'Approved',
-      statusByHR: 'Approved'
+      statusByHR: 'Approved',
+      paidByAccounts: false,
     },
   ]);
   const [baseClaim, setBaseClaim] = useState([
@@ -34,7 +37,8 @@ const ACTeams = () => {
       amount: 1000,
       expenseDate: '2021-08-01',
       statusByAM: 'Approved',
-      statusByHR: 'Approved'
+      statusByHR: 'Approved',
+      paidByAccounts: true,
     },
     {
       id: 2,
@@ -43,27 +47,51 @@ const ACTeams = () => {
       amount: 500,
       expenseDate: '2021-08-02',
       statusByAM: 'Approved',
-      statusByHR: 'Approved'
+      statusByHR: 'Approved',
+      paidByAccounts: false,
     },
   ]);
 
-  //const navigate = useNavigate();
-
-  // useEffect(() => {
-  //   const result = baseClaim.filter((claim) => {
-  //     return claim.id.match(search)
-  //   })
-  //   setClaims(result)
-  // }, [search])
-
   const navigate = useNavigate();
+
+  useEffect(() => {
+    if (localStorage.getItem('token')) {
+      Axios.get('http://localhost:3001/auth/', {
+        headers: {
+          authorization: localStorage.getItem('token'),
+        },
+      }).then(({ data }) => {
+        if (data.status === 410) {
+          localStorage.removeItem('token');
+          navigate('/');
+        }
+        else if (data.status === 200) {
+          if (data.role === 'employee') {
+            navigate('/employee');
+          }
+          else if (data.role === 'am') {
+            navigate('/account-manager');
+          }
+          else if (data.role === 'hr') {
+            navigate('/hr');
+          }
+        }
+      }).catch((error) => {
+        console.log(error);
+      });
+    }
+    else {
+      navigate('/');
+    }
+  }, []);
+
 
   const acceptClaim = (id) => {
     const updatedClaims = claims.map((claim) => {
       if (claim.id === id) {
         return {
           ...claim,
-          statusByAM: 'Approved'
+          paidByAccounts: true
         };
       }
       return claim;
@@ -76,7 +104,7 @@ const ACTeams = () => {
       if (claim.id === id) {
         return {
           ...claim,
-          statusByAM: 'Rejected'
+          paidByAccounts: false
         };
       }
       return claim;
@@ -116,59 +144,62 @@ const ACTeams = () => {
       sortable: true
     },
     {
+      name: 'Paid',
+      selector: (row) => row.paidByAccounts ? 'Yes' : 'No',
+      sortable: true
+    },
+    {
       name: 'Actions',
       cell: (row) => (
         <div>
-          <button
-             className="action-button"
-             onClick={() => acceptClaim(row.id)}
-           >
-             Paid
-           </button >
- 
-           <button
-             className="action-button"
-             onClick={() => rejectClaim(row.id)}
-          >
-            Pending
-          </button >
+          {
+            row.paidByAccounts ?
+              <button
+                className="reject-button"
+                onClick={() => rejectClaim(row.id)}
+              >
+                Mark Pending
+              </button > :
+              <button
+                className="accept-button"
+                onClick={() => acceptClaim(row.id)}
+              >
+                Mark Paid
+              </button >
+          }
         </div>
       ),
-
-      ignoreRowClick: true,
-      allowOverflow: true,
-      button: true
     }
   ];
 
   return (
     <>
-    <Topbar name = "EDUDIGM EXPENSE" />
-    <div className="dashboard-container">
-      <h2 className="dashboard-title"></h2>
-      <DataTable
-        columns={columns}
-        data={claims}
-        striped
-        responsive
-        pagination
-        highlightOnHover
-        fixedHeader
-        fixedHeaderScrollHeight='500px'
-        subHeader
-        subHeaderComponent={
-          <TextField
-            id='search'
-            label='Search'
-            type='search'
-            variant='outlined'
-            className='input'
-            size='small'
-            onChange={(e) => setSearch(e.target.value)}
-          />
-        }
-      />
-    </div>
+      <Topbar name="EDUDIGM EXPENSE" />
+      <div className="dashboard-container">
+        <h2 className="dashboard-title"></h2>
+        <DataTable
+          columns={columns}
+          data={claims}
+          striped
+          responsive
+          pagination
+          highlightOnHover
+          fixedHeader
+          fixedHeaderScrollHeight='500px'
+          subHeader
+          subHeaderComponent={
+            <TextField
+              id='search'
+              label='Search'
+              type='search'
+              variant='outlined'
+              className='input'
+              size='small'
+              onChange={(e) => setSearch(e.target.value)}
+            />
+          }
+        />
+      </div>
     </>
   );
 };

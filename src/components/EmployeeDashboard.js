@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import DataTable from 'react-data-table-component';
 import { Link, useNavigate } from 'react-router-dom';
 import Topbar from './Topbar';
@@ -26,6 +26,8 @@ const EmployeeDashboard = () => {
     },
     // Add more claim objects as needed
   ]);
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (localStorage.getItem('token')) {
@@ -55,6 +57,7 @@ const EmployeeDashboard = () => {
       navigate('/');
     }
   }, []);
+
 
   const columns = [
     {
@@ -99,7 +102,7 @@ const EmployeeDashboard = () => {
 
   return (
     <>
-      <Topbar name="EDUDIGM" />
+      <Topbar name="Employee Dashboard" />
 
       <div className="employee-dashboard">
         <h1>Dashboard</h1>

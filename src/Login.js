@@ -30,6 +30,9 @@ const Login = () => {
             else if (data.role === 'am') {
               navigate('/account-manager');
             }
+            else if (data.role === 'accounts') {
+              navigate('/accounts');
+            }
           }
         }).catch((error) => {
           console.log(error);
@@ -52,8 +55,11 @@ const Login = () => {
         else if (data.role === 'hr') {
           navigate('/hr');
         }
-        else if (data.role === 'accountmanager') {
+        else if (data.role === 'am') {
           navigate('/account-manager');
+        }
+        else if (data.role === 'accounts') {
+          navigate('/accounts');
         }
       } else {
         toast.error(data.message, {
@@ -96,6 +102,8 @@ const Login = () => {
             value={username}
             onChange={(e) => setUsername(e.target.value)}
             required
+            autoComplete="off"
+            placeholder='Enter your email address'
           />
           <label htmlFor="password">Password:</label>
           <input
@@ -104,6 +112,8 @@ const Login = () => {
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             required
+            autoComplete='off'
+            placeholder='Enter your password'
           />
           <button type="submit">Login</button>
         </form>
