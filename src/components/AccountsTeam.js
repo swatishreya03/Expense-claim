@@ -74,7 +74,7 @@ const ACTeams = () => {
 
 
   const acceptClaim = async (id) => {
-    await Axios.put(`http://localhost:3001/claim/mrk-paid/${id}`, {}, {
+    await Axios.put(`http://localhost:3001/claim/mark-paid/${id}`, {}, {
       headers: {
         authorization: localStorage.getItem('token'),
       },
@@ -122,32 +122,32 @@ const ACTeams = () => {
   const columns = [
     {
       name: 'Employee ID',
-      selector: (row) => row.employeeId,
+      selector: (row) => row.employeeID,
       sortable: true
     },
     {
       name: 'Category',
-      selector: (row) => row.category,
+      selector: (row) => row.category==='other' ? row.otherCategory : row.category,
       sortable: true
     },
     {
       name: 'Amount',
-      selector: (row) => row.amount,
+      selector: (row) => row.claimAmount,
       sortable: true
     },
     {
       name: 'Expense Date',
-      selector: (row) => row.expenseDate,
+      selector: (row) => row.claimDate,
       sortable: true
     },
     {
       name: 'Account Manager Status',
-      selector: (row) => row.statusByAM,
+      selector: (row) => row.statusAM? 'Accepted' : 'Rejected',
       sortable: true
     },
     {
       name: 'HR Status',
-      selector: (row) => row.statusByHR,
+      selector: (row) => row.statusHR? 'Accepted' : 'Rejected',
       sortable: true
     },
     {
