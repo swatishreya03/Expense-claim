@@ -202,6 +202,8 @@ const HRDashboard = () => {
     {
       name: 'Actions',
       cell: (row) => (
+        <>
+        {(row.approved === false && row.rejected === false ) &&
         <div className='action-buttons'>
           <button
             className="accept-button"
@@ -209,7 +211,6 @@ const HRDashboard = () => {
           >
             Accept
           </button >
-
           <button
             className="reject-button"
             onClick={() => rejectClaim(row._id)}
@@ -217,6 +218,17 @@ const HRDashboard = () => {
             Reject
           </button >
         </div>
+    }
+    {
+    (row.approved === true && row.rejected === false ) &&
+    <span>Approved</span>
+
+    }
+    {
+      (row.approved === false && row.rejected === true ) &&
+      <span>Rejected</span>
+    }
+        </>
       )
     }
   ];

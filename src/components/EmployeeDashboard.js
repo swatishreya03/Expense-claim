@@ -70,7 +70,7 @@ const EmployeeDashboard = () => {
     },
     {
       name: 'Amount',
-      selector: (row) => row._id,
+      selector: (row) => row.claimAmount,
       sortable: true,
     },
     {
@@ -105,7 +105,7 @@ const EmployeeDashboard = () => {
     },
     {
       name: 'Status',
-      selector: (row) => row.rejected ? 'Rejected' : row.approved ? 'Approved' : 'Pending',
+      selector: (row) => row.rejected ? 'Rejected' : row.paid ? 'Paid' : 'Pending',
       sortable: true,
     },
   ];

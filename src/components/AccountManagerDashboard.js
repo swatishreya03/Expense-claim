@@ -140,6 +140,7 @@ const AMDashboard = () => {
       selector: (row) => row.claimDate,
       sortable: true
     },
+    
     {
       name: 'Invoice',
       selector: (row) => (
@@ -173,6 +174,8 @@ const AMDashboard = () => {
     {
       name: 'Actions',
       cell: (row) => (
+        <>
+        {(row.approvedAm === false && row.rejectedAm === false ) &&
         <div className='action-buttons'>
           <button
             className="accept-button"
@@ -180,7 +183,6 @@ const AMDashboard = () => {
           >
             Accept
           </button >
-
           <button
             className="reject-button"
             onClick={() => rejectClaim(row._id)}
@@ -188,6 +190,17 @@ const AMDashboard = () => {
             Reject
           </button >
         </div>
+    }
+    {
+    (row.approvedAm === true && row.rejectedAm === false ) &&
+    <span>Approved</span>
+
+    }
+    {
+      (row.approvedAm === false && row.rejectedAm === true ) &&
+      <span>Rejected</span>
+    }
+        </>
       ),
     }
   ];

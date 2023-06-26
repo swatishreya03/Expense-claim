@@ -141,7 +141,7 @@ const ACTeams = () => {
       sortable: true
     },
     {
-      name: 'Account Manager Status',
+      name: 'AM Status',
       selector: (row) => row.statusAM? 'Accepted' : 'Rejected',
       sortable: true
     },
@@ -150,14 +150,16 @@ const ACTeams = () => {
       selector: (row) => row.statusHR? 'Accepted' : 'Rejected',
       sortable: true
     },
-    {
+   /* {
       name: 'Paid',
       selector: (row) => row.paidByAccounts ? 'Yes' : 'No',
       sortable: true
-    },
+    },*/
     {
       name: 'Actions',
       cell: (row) => (
+        <>
+        {(row.paid === false && row.rejected === false ) &&
         <div>
 
           <button
@@ -174,9 +176,20 @@ const ACTeams = () => {
           </button >
 
         </div>
-      ),
-    }
-  ];
+      }
+      {
+      (row.paid === true && row.rejected === false ) &&
+      <span>Paid</span>
+  
+      }
+      {
+        (row.paid === false && row.rejected === true ) &&
+        <span>Rejected</span>
+      }
+          </>
+        ),
+      }
+    ];
 
   return (
     <>
