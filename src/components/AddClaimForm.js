@@ -5,7 +5,6 @@ import { useNavigate } from 'react-router';
 import { ToastContainer, toast } from 'react-toastify';
 import { CircularProgress } from '@mui/material';
 
-
 const AddClaimForm = () => {
   const [category, setCategory] = useState('');
   const [amount, setAmount] = useState('');
@@ -244,8 +243,14 @@ const AddClaimForm = () => {
       if (onboardingLocation && destinationLocation) {
         try {
           //const response = await fetch(
-          const url = `https://maps.googleapis.com/maps/api/distancematrix/json?origins=${(onboardingLocation)}&destinations=${(destinationLocation)}&key=mKxIvt88UJY8E6x8sY6m1BllBEL17Ies`;
-          const response = await fetch(url);
+          const url = `https://maps.googleapis.com/maps/api/distancematrix/json?origins=${onboardingLocation}&destinations=${destinationLocation}&key=mKxIvt88UJY8E6x8sY6m1BllBEL17Ies`;
+          const response = await fetch(url, {
+            method: 'GET',
+            mode: 'no-cors',
+            headers: {
+              'Content-Type': 'application/json',
+            }
+          });
 
           const data = await response.json();
           console.log('Response Data:', data);
