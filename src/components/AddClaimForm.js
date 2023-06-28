@@ -202,6 +202,18 @@ const AddClaimForm = () => {
           resetForm();
           document.getElementById("claim-form").reset();
         }
+        else {
+          toast.error(data.message, {
+            position: "top-center",
+            autoClose: 3000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "colored",
+          });
+        }
       }).catch((error) => {
         setLoading(false);
         console.log(error);

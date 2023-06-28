@@ -119,6 +119,41 @@ const AMDashboard = () => {
     });
   }
 
+  const handleDownloadInvoice = async (filename, id) => {
+    try {
+      const response = await fetch(`http://localhost:3001/claim/download-invoice/${id}`);
+      const blob = await response.blob();
+      const downloadUrl = window.URL.createObjectURL(new Blob([blob]));
+
+      const link = document.createElement('a');
+      link.href = downloadUrl;
+      link.setAttribute('download', filename);
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+    } catch (error) {
+      console.error('Error downloading file:', error);
+    }
+  };
+
+  const handleDownloadMail = async (filename, id) => {
+    try {
+      const response = await fetch(`http://localhost:3001/claim/download-mail/${id}`);
+      const blob = await response.blob();
+      const downloadUrl = window.URL.createObjectURL(new Blob([blob]));
+
+      const link = document.createElement('a');
+      link.href = downloadUrl;
+      link.setAttribute('download', filename);
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+    } catch (error) {
+      console.error('Error downloading file:', error);
+    }
+  };
+
+
   const columns = [
     {
       name: 'Employee ID',
@@ -148,7 +183,7 @@ const AMDashboard = () => {
     {
       name: 'Invoice',
       selector: (row) => (
-        <div>
+        <>
           <button style={
             {
               backgroundColor: 'white',
@@ -157,8 +192,8 @@ const AMDashboard = () => {
               textDecoration: 'underline',
               cursor: 'pointer',
             }}
-            className="invoice-button">View Invoice</button>
-        </div>),
+            className="invoice-button" onClick={() => handleDownloadInvoice(row.invoice, row._id)}> View Invoice</button>
+        </>),
     },
     {
       name: 'Mail',
@@ -172,7 +207,7 @@ const AMDashboard = () => {
               textDecoration: 'underline',
               cursor: 'pointer',
             }}
-            className="mail-button">View Mail</button>
+            className="mail-button" onClick={() => handleDownloadMail(row.mail, row._id)}>View Mail</button>
         </div>),
     },
     {

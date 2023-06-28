@@ -119,6 +119,41 @@ const ACTeams = () => {
     });
   }
 
+  const handleDownloadInvoice = async (filename, id) => {
+    try {
+      const response = await fetch(`http://localhost:3001/claim/download-invoice/${id}`);
+      const blob = await response.blob();
+      const downloadUrl = window.URL.createObjectURL(new Blob([blob]));
+
+      const link = document.createElement('a');
+      link.href = downloadUrl;
+      link.setAttribute('download', filename);
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+    } catch (error) {
+      console.error('Error downloading file:', error);
+    }
+  };
+
+  const handleDownloadMail = async (filename, id) => {
+    try {
+      const response = await fetch(`http://localhost:3001/claim/download-mail/${id}`);
+      const blob = await response.blob();
+      const downloadUrl = window.URL.createObjectURL(new Blob([blob]));
+
+      const link = document.createElement('a');
+      link.href = downloadUrl;
+      link.setAttribute('download', filename);
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+    } catch (error) {
+      console.error('Error downloading file:', error);
+    }
+  };
+
+
   const columns = [
     {
       name: 'Employee ID',
@@ -132,7 +167,7 @@ const ACTeams = () => {
     },
     {
       name: 'Category',
-      selector: (row) => row.category==='other' ? row.otherCategory : row.category,
+      selector: (row) => row.category === 'other' ? row.otherCategory : row.category,
       sortable: true
     },
     {
@@ -145,52 +180,82 @@ const ACTeams = () => {
       selector: (row) => row.claimDate,
       sortable: true
     },
-    
+
     {
       name: 'Status',
-      selector: (row) => row.statusHR? 'Accepted' : 'Rejected',
+      selector: (row) => row.statusHR ? 'Accepted' : 'Rejected',
       sortable: true
     },
-   /* {
-      name: 'Paid',
-      selector: (row) => row.paidByAccounts ? 'Yes' : 'No',
-      sortable: true
-    },*/
+    {
+      name: 'Invoice',
+      selector: (row) => (
+        <>
+          <button style={
+            {
+              backgroundColor: 'white',
+              border: 'none',
+              color: 'blue',
+              textDecoration: 'underline',
+              cursor: 'pointer',
+            }}
+            className="invoice-button" onClick={() => handleDownloadInvoice(row.invoice, row._id)}> View Invoice</button>
+        </>),
+    },
+    {
+      name: 'Mail',
+      selector: (row) => (
+        <div>
+          <button style={
+            {
+              backgroundColor: 'white',
+              border: 'none',
+              color: 'blue',
+              textDecoration: 'underline',
+              cursor: 'pointer',
+            }}
+            className="mail-button" onClick={() => handleDownloadMail(row.mail, row._id)}>View Mail</button>
+        </div>),
+    },
+    /* {
+       name: 'Paid',
+       selector: (row) => row.paidByAccounts ? 'Yes' : 'No',
+       sortable: true
+     },*/
     {
       name: 'Actions',
       cell: (row) => (
         <>
-        {(row.paid === false && row.rejected === false ) &&
-        <div>
+          {(row.paid === false && row.rejected === false) &&
+            <div>
 
-          <button
-            className="reject-button"
-            onClick={() => rejectClaim(row._id)}
-          >
-            Reject Claim
-          </button >
-          <button
-            className="accept-button"
-            onClick={() => acceptClaim(row._id)}
-          >
-            Mark Paid
-          </button >
+              <button
+                className="reject-button"
+                onClick={() => rejectClaim(row._id)}
+              >
+                Reject Claim
+              </button >
+              <button
+                className="accept-button"
+                onClick={() => acceptClaim(row._id)}
+              >
+                Mark Paid
+              </button >
 
-        </div>
-      }
-      {
-      (row.paid === true && row.rejected === false ) &&
-      <span>Paid</span>
-  
-      }
-      {
-        (row.paid === false && row.rejected === true ) &&
-        <span>Rejected</span>
-      }
-          </>
-        ),
-      }
-    ];
+            </div>
+          }
+          {
+            (row.paid === true && row.rejected === false) &&
+            <span>Paid</span>
+
+          }
+          {
+            (row.paid === false && row.rejected === true) &&
+            <span>Rejected</span>
+          }
+        </>
+      ),
+    }
+  ];
 
   return (
     <>

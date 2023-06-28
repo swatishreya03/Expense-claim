@@ -60,6 +60,40 @@ const EmployeeDashboard = () => {
     }
   }, []);
 
+  const handleDownloadInvoice = async (filename, id) => {
+    try {
+      const response = await fetch(`http://localhost:3001/claim/download-invoice/${id}`);
+      const blob = await response.blob();
+      const downloadUrl = window.URL.createObjectURL(new Blob([blob]));
+
+      const link = document.createElement('a');
+      link.href = downloadUrl;
+      link.setAttribute('download', filename);
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+    } catch (error) {
+      console.error('Error downloading file:', error);
+    }
+  };
+
+  const handleDownloadMail = async (filename, id) => {
+    try {
+      const response = await fetch(`http://localhost:3001/claim/download-mail/${id}`);
+      const blob = await response.blob();
+      const downloadUrl = window.URL.createObjectURL(new Blob([blob]));
+
+      const link = document.createElement('a');
+      link.href = downloadUrl;
+      link.setAttribute('download', filename);
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+    } catch (error) {
+      console.error('Error downloading file:', error);
+    }
+  };
+
 
   const columns = [
     {
@@ -74,9 +108,14 @@ const EmployeeDashboard = () => {
       sortable: true,
     },
     {
+      name: 'Date',
+      selector: (row) => row.claimDate,
+      sortable: true,
+    },
+    {
       name: 'Invoice',
       selector: (row) => (
-        <div>
+        <>
           <button style={
             {
               backgroundColor: 'white',
@@ -85,8 +124,8 @@ const EmployeeDashboard = () => {
               textDecoration: 'underline',
               cursor: 'pointer',
             }}
-            className="invoice-button">View Invoice</button>
-        </div>),
+            className="invoice-button" onClick={() => handleDownloadInvoice(row.invoice, row._id)}> View Invoice</button>
+        </>),
     },
     {
       name: 'Mail',
@@ -100,7 +139,7 @@ const EmployeeDashboard = () => {
               textDecoration: 'underline',
               cursor: 'pointer',
             }}
-            className="mail-button">View Mail</button>
+            className="mail-button" onClick={() => handleDownloadMail(row.mail, row._id)}>View Mail</button>
         </div>),
     },
     {
