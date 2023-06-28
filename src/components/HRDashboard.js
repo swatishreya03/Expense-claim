@@ -150,6 +150,11 @@ const HRDashboard = () => {
       sortable: true
     },
     {
+      name: 'Employee Name',
+      selector: (row) => row.name,
+      sortable: true
+    },
+    {
       name: 'Category',
       selector: (row) => row.category,
       sortable: true
@@ -203,31 +208,31 @@ const HRDashboard = () => {
       name: 'Actions',
       cell: (row) => (
         <>
-        {(row.approved === false && row.rejected === false ) &&
-        <div className='action-buttons'>
-          <button
-            className="accept-button"
-            onClick={() => acceptClaim(row._id)}
-          >
-            Accept
-          </button >
-          <button
-            className="reject-button"
-            onClick={() => rejectClaim(row._id)}
-          >
-            Reject
-          </button >
-        </div>
-    }
-    {
-    (row.approved === true && row.rejected === false ) &&
-    <span>Approved</span>
+          {(row.approved === false && row.rejected === false) &&
+            <div className='action-buttons'>
+              <button
+                className="accept-button"
+                onClick={() => acceptClaim(row._id)}
+              >
+                Accept
+              </button >
+              <button
+                className="reject-button"
+                onClick={() => rejectClaim(row._id)}
+              >
+                Reject
+              </button >
+            </div>
+          }
+          {
+            (row.approved === true && row.rejected === false) &&
+            <span>Approved</span>
 
-    }
-    {
-      (row.approved === false && row.rejected === true ) &&
-      <span>Rejected</span>
-    }
+          }
+          {
+            (row.approved === false && row.rejected === true) &&
+            <span>Rejected</span>
+          }
         </>
       )
     }

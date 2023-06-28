@@ -3,6 +3,8 @@ import Topbar from './Topbar';
 import Axios from 'axios';
 import { useNavigate } from 'react-router';
 import { ToastContainer, toast } from 'react-toastify';
+import { CircularProgress } from '@mui/material';
+
 
 const AddClaimForm = () => {
   const [category, setCategory] = useState('');
@@ -21,6 +23,7 @@ const AddClaimForm = () => {
   });
   const [name, setName] = useState('');
   const [empID, setEmpID] = useState('');
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -37,8 +40,6 @@ const AddClaimForm = () => {
           }
           else if (data.status === 200) {
             setEmpID(data.id);
-          }
-          else if (data.status === 200) {
             setName(data.name);
           }
         }).catch((error) => {
@@ -52,7 +53,123 @@ const AddClaimForm = () => {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    console.log(name);
+    setLoading(true);
+    if (category === '') {
+      toast.error('Please select a category!', {
+        position: "top-center",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+      });
+      setLoading(false);
+      return;
+    }
+    if (amount === '') {
+      toast.error('Please enter the claim amount!', {
+        position: "top-center",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+      });
+      setLoading(false);
+      return;
+    }
+    if (category === 'travel') {
+      if (travelDetails.travelType === '') {
+        toast.error('Please select a travel type!', {
+          position: "top-center",
+          autoClose: 3000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "colored",
+        });
+        setLoading(false);
+        return;
+      }
+      if (travelDetails.travelType === 'withinCity') {
+        if (travelDetails.withinCity.onboardingLocation === '') {
+          toast.error('Please enter the onboarding location!', {
+            position: "top-center",
+            autoClose: 3000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "colored",
+          });
+          setLoading(false);
+          return;
+        }
+        if (travelDetails.withinCity.destinationLocation === '') {
+          toast.error('Please enter the destination location!', {
+            position: "top-center",
+            autoClose: 3000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "colored",
+          });
+          setLoading(false);
+          return;
+        }
+        if (travelDetails.withinCity.distance === '') {
+          toast.error('Please enter the distance!', {
+            position: "top-center",
+            autoClose: 3000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "colored",
+          });
+          setLoading(false);
+          return;
+        }
+      }
+    }
+    if (invoice === null) {
+      toast.error('Please upload the invoice!', {
+        position: "top-center",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+      });
+      setLoading(false);
+      return;
+    }
+    if (mail === null) {
+      toast.error('Please upload the mail!', {
+        position: "top-center",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+      });
+      setLoading(false);
+      return;
+    }
 
     const formData = new FormData();
     formData.append('category', category);
@@ -70,8 +187,10 @@ const AddClaimForm = () => {
       }
     })
       .then(({ data }) => {
+        console.log(data);
+        setLoading(false);
         if (data.status === 200) {
-          toast.success('Claim Rejected Successfully!', {
+          toast.success('Claim Added Successfully!', {
             position: "top-center",
             autoClose: 3000,
             hideProgressBar: false,
@@ -82,8 +201,10 @@ const AddClaimForm = () => {
             theme: "colored",
           });
           resetForm();
+          document.getElementById("claim-form").reset();
         }
       }).catch((error) => {
+        setLoading(false);
         console.log(error);
       });
   };
@@ -165,9 +286,21 @@ const AddClaimForm = () => {
     <>
       <Topbar name="EDUDIGM" />
       <div className='claim-outer'>
+        <ToastContainer
+          position="top-center"
+          autoClose={3000}
+          hideProgressBar={false}
+          newestOnTop
+          closeOnClick
+          rtl={false}
+          pauseOnFocusLoss
+          draggable
+          pauseOnHover
+          theme="colored"
+        />
         <div className="add-claim-form">
           <h1>Add New Claim</h1>
-          <form onSubmit={handleSubmit}>
+          <form onSubmit={handleSubmit} id='claim-form'>
             <label>
               Category:
               <select
@@ -282,7 +415,19 @@ const AddClaimForm = () => {
                 required
               />
             </label>
-            <button type="submit">Submit Claim</button>
+            {
+              loading ? (
+                <button type="submit" disabled>
+                  <CircularProgress
+                    size={20}
+                    color="inherit"
+                  />
+                </button>
+              ) : (
+                <button type="submit">Submit Claim</button>
+              )
+            }
+
           </form>
         </div>
       </div>

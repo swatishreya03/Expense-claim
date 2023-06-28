@@ -126,6 +126,11 @@ const AMDashboard = () => {
       sortable: true
     },
     {
+      name: 'Employee Name',
+      selector: (row) => row.name,
+      sortable: true
+    },
+    {
       name: 'Category',
       selector: (row) => row.category,
       sortable: true
@@ -140,11 +145,6 @@ const AMDashboard = () => {
       selector: (row) => row.claimDate,
       sortable: true
     },
-   /* {
-      name: 'Add Comments',
-      cell: (row) => <input type="text" value={row.AMcomment}  />,
-      sortable: true  
-    },*/
     {
       name: 'Invoice',
       selector: (row) => (
@@ -179,32 +179,32 @@ const AMDashboard = () => {
       name: 'Actions',
       cell: (row) => (
         <>
-        
-        {(row.approvedAm === false && row.rejectedAm === false ) &&
-        <div className='action-buttons'>
-          <button
-            className="accept-button"
-            onClick={() => acceptClaim(row._id)}
-          >
-            Accept
-          </button >
-          <button
-            className="reject-button"
-            onClick={() => rejectClaim(row._id)}
-          >
-            Reject
-          </button >
-        </div>
-    }
-    {
-    (row.approvedAm === true && row.rejectedAm === false ) &&
-    <span>Approved</span>
 
-    }
-    {
-      (row.approvedAm === false && row.rejectedAm === true ) &&
-      <span>Rejected</span>
-    }
+          {(row.approvedAm === false && row.rejectedAm === false) &&
+            <div className='action-buttons'>
+              <button
+                className="accept-button"
+                onClick={() => acceptClaim(row._id)}
+              >
+                Accept
+              </button >
+              <button
+                className="reject-button"
+                onClick={() => rejectClaim(row._id)}
+              >
+                Reject
+              </button >
+            </div>
+          }
+          {
+            (row.approvedAm === true && row.rejectedAm === false) &&
+            <span>Approved</span>
+
+          }
+          {
+            (row.approvedAm === false && row.rejectedAm === true) &&
+            <span>Rejected</span>
+          }
         </>
       ),
     }

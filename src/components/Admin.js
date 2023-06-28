@@ -153,6 +153,11 @@ const AdminDashboard = () => {
       sortable: true
     },
     {
+      name: 'Employee Name',
+      selector: (row) => row.name,
+      sortable: true
+    },
+    {
       name: 'Category',
       selector: (row) => row.category,
       sortable: true
@@ -173,10 +178,10 @@ const AdminDashboard = () => {
       sortable: true
     },
     {
-        name: 'HR Status',
-        selector: (row) => row.statusHR? 'Accepted' : 'Rejected',
-        sortable: true
-      },
+      name: 'HR Status',
+      selector: (row) => row.statusHR ? 'Accepted' : 'Rejected',
+      sortable: true
+    },
     {
       name: 'Invoice',
       selector: (row) => (
@@ -211,41 +216,41 @@ const AdminDashboard = () => {
       name: 'Actions',
       cell: (row) => (
         <>
-        {(row.approvedAd === false && row.rejectedAd === false ) &&
-        <div className='action-buttons'>
-          <button
-            className="accept-button"
-            onClick={() => acceptClaim(row._id)}
-          >
-            Accept
-          </button >
-          <button
-            className="reject-button"
-            onClick={() => rejectClaim(row._id)}
-          >
-            Reject
-          </button >
-        </div>
-    }
-    {
-    (row.approvedAd === true && row.rejectedAd === false ) &&
-    <span>Approved</span>
+          {(row.approvedAd === false && row.rejectedAd === false) &&
+            <div className='action-buttons'>
+              <button
+                className="accept-button"
+                onClick={() => acceptClaim(row._id)}
+              >
+                Accept
+              </button >
+              <button
+                className="reject-button"
+                onClick={() => rejectClaim(row._id)}
+              >
+                Reject
+              </button >
+            </div>
+          }
+          {
+            (row.approvedAd === true && row.rejectedAd === false) &&
+            <span>Approved</span>
 
-    }
-    {
-      (row.approvedAd === false && row.rejectedAd === true ) &&
-      <span>Rejected</span>
-    }
+          }
+          {
+            (row.approvedAd === false && row.rejectedAd === true) &&
+            <span>Rejected</span>
+          }
 
         </>
       )
     },
     {
-        name: 'Status',
-        selector: (row) => row.rejected ? 'Rejected' : row.paid ? 'Paid' : 'Pending',
-        sortable: true,
-      },
-  
+      name: 'Status',
+      selector: (row) => row.rejected ? 'Rejected' : row.paid ? 'Paid' : 'Pending',
+      sortable: true,
+    },
+
   ];
 
   return (
