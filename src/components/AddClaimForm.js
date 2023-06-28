@@ -19,6 +19,7 @@ const AddClaimForm = () => {
       distance: '',
     },
   });
+  const [name, setName] = useState('');
   const [empID, setEmpID] = useState('');
   const navigate = useNavigate();
 
@@ -37,6 +38,9 @@ const AddClaimForm = () => {
           else if (data.status === 200) {
             setEmpID(data.id);
           }
+          else if (data.status === 200) {
+            setName(data.name);
+          }
         }).catch((error) => {
           console.log(error);
         });
@@ -48,7 +52,7 @@ const AddClaimForm = () => {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    console.log(invoice);
+    console.log(name);
 
     const formData = new FormData();
     formData.append('category', category);
@@ -58,6 +62,7 @@ const AddClaimForm = () => {
     formData.append('otherCategory', otherCategory);
     formData.append('travel', travelDetails);
     formData.append('employeeID', empID);
+    formData.append('name', name);
 
     await Axios.post('http://localhost:3001/claim/add-claim', formData, {
       headers: {

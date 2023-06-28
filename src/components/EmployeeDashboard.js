@@ -104,6 +104,11 @@ const EmployeeDashboard = () => {
         </div>),
     },
     {
+      name: 'Admin Status',
+      selector: (row) => row.statusAdmin ? 'Accepted' : 'Pending',
+      sortable: true
+    },
+    {
       name: 'Status',
       selector: (row) => row.rejected ? 'Rejected' : row.paid ? 'Paid' : 'Pending',
       sortable: true,

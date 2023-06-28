@@ -165,7 +165,7 @@ const HRDashboard = () => {
       sortable: true
     },
     {
-      name: 'Account Manager Status',
+      name: 'AM Status',
       selector: (row) => row.statusAM ? 'Accepted' : 'Pending',
       sortable: true
     },

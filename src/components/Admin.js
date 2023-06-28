@@ -6,14 +6,15 @@ import Topbar from './Topbar';
 import Axios from 'axios';
 import { toast, ToastContainer } from 'react-toastify';
 
-const AMDashboard = () => {
+const AdminDashboard = () => {
   const [search, setSearch] = useState('')
   const [claims, setClaims] = useState([]);
   const [baseClaims, setBaseClaims] = useState([]);
+
   const navigate = useNavigate();
 
   const getClaims = () => {
-    Axios.get(`http://localhost:3001/claim/get-employee-claims-am/`, {
+    Axios.get(`http://localhost:3001/claim/get-all-claims/`, {
       headers: {
         authorization: localStorage.getItem('token'),
       },
@@ -21,12 +22,51 @@ const AMDashboard = () => {
       if (data.status === 200) {
         setClaims(data.claims);
         setBaseClaims(data.claims);
-        console.log(data.claims);
       }
     }).catch((error) => {
       console.log(error);
     });
   }
+
+  useEffect(() => {
+    if (localStorage.getItem('token')) {
+      Axios.get('http://localhost:3001/auth/', {
+        headers: {
+          authorization: localStorage.getItem('token'),
+        },
+      })
+        .then(({ data }) => {
+          if (data.status === 410) {
+            localStorage.removeItem('token');
+            navigate('/');
+          }
+          else if (data.status === 200) {
+            if (data.role === 'admin') {
+              getClaims();
+            }
+            else {
+              if (data.role === 'employee') {
+                navigate('/employee');
+              }
+              else if (data.role === 'am') {
+                navigate('/account-manager');
+              }
+              else if (data.role === 'accounts') {
+                navigate('/accounts');
+              }
+              else if (data.role === 'hr') {
+                navigate('/hr');
+              }
+            }
+          }
+        }).catch((error) => {
+          console.log(error);
+        });
+    }
+    else {
+      navigate('/');
+    }
+  }, []);
 
   useEffect(() => {
     const result = baseClaims.filter((claim) => {
@@ -36,43 +76,10 @@ const AMDashboard = () => {
     setClaims(result)
   }, [search])
 
-  useEffect(() => {
-    if (localStorage.getItem('token')) {
-      Axios.get('http://localhost:3001/auth/', {
-        headers: {
-          authorization: localStorage.getItem('token'),
-        },
-      }).then(({ data }) => {
-        if (data.status === 410) {
-          localStorage.removeItem('token');
-          navigate('/');
-        }
-        else if (data.status === 200) {
-          if (data.role === 'am') {
-            getClaims();
-          } else {
-            if (data.role === 'employee') {
-              navigate('/employee');
-            } else if (data.role === 'hr') {
-              navigate('/hr');
-            }
-            else if (data.role === 'accounts') {
-              navigate('/accounts');
-            }
-          }
 
-        }
-      }).catch((error) => {
-        console.log(error);
-      });
-    } else {
-      navigate('/');
-    }
-  }, []);
 
   const acceptClaim = async (id) => {
-    console.log(id);
-    await Axios.put(`http://localhost:3001/claim/accept-am/${id}`, {}, {
+    await Axios.put(`http://localhost:3001/claim/accept-admin/${id}`, {}, {
       headers: {
         authorization: localStorage.getItem('token'),
       },
@@ -92,11 +99,21 @@ const AMDashboard = () => {
       }
     }).catch((error) => {
       console.log(error);
+      toast.error('Something went wrong', {
+        position: "top-center",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        theme: "colored",
+      });
     });
   }
 
+
   const rejectClaim = async (id) => {
-    await Axios.put(`http://localhost:3001/claim/reject-am/${id}`, {}, {
+    await Axios.put(`http://localhost:3001/claim/reject-admin/${id}`, {}, {
       headers: {
         authorization: localStorage.getItem('token'),
       },
@@ -114,7 +131,17 @@ const AMDashboard = () => {
         });
         getClaims();
       }
-    }).catch((error) => {
+    }
+    ).catch((error) => {
+      toast.error('Something went wrong', {
+        position: "top-center",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        theme: "colored",
+      });
       console.log(error);
     });
   }
@@ -140,11 +167,16 @@ const AMDashboard = () => {
       selector: (row) => row.claimDate,
       sortable: true
     },
-   /* {
-      name: 'Add Comments',
-      cell: (row) => <input type="text" value={row.AMcomment}  />,
-      sortable: true  
-    },*/
+    {
+      name: 'AM Status',
+      selector: (row) => row.statusAM ? 'Accepted' : 'Pending',
+      sortable: true
+    },
+    {
+        name: 'HR Status',
+        selector: (row) => row.statusHR? 'Accepted' : 'Rejected',
+        sortable: true
+      },
     {
       name: 'Invoice',
       selector: (row) => (
@@ -179,8 +211,7 @@ const AMDashboard = () => {
       name: 'Actions',
       cell: (row) => (
         <>
-        
-        {(row.approvedAm === false && row.rejectedAm === false ) &&
+        {(row.approvedAd === false && row.rejectedAd === false ) &&
         <div className='action-buttons'>
           <button
             className="accept-button"
@@ -197,21 +228,28 @@ const AMDashboard = () => {
         </div>
     }
     {
-    (row.approvedAm === true && row.rejectedAm === false ) &&
+    (row.approvedAd === true && row.rejectedAd === false ) &&
     <span>Approved</span>
 
     }
     {
-      (row.approvedAm === false && row.rejectedAm === true ) &&
+      (row.approvedAd === false && row.rejectedAd === true ) &&
       <span>Rejected</span>
     }
+
         </>
-      ),
-    }
+      )
+    },
+    {
+        name: 'Status',
+        selector: (row) => row.rejected ? 'Rejected' : row.paid ? 'Paid' : 'Pending',
+        sortable: true,
+      },
+  
   ];
 
   return (
-    <>
+    <div className='dashboard-outer'>
       <ToastContainer
         position="top-center"
         autoClose={3000}
@@ -224,9 +262,10 @@ const AMDashboard = () => {
         pauseOnHover
         theme="colored"
       />
-      <Topbar name="Account Manager Dashboard" />
+      <Topbar name="ADMIN" />
       <div className="dashboard-container">
         <DataTable
+          title='Claims'
           columns={columns}
           data={claims}
           striped
@@ -249,9 +288,8 @@ const AMDashboard = () => {
           }
         />
       </div>
-    </>
+    </div>
   );
-
 };
 
-export default AMDashboard;
+export default AdminDashboard;

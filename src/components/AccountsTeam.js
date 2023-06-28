@@ -126,6 +126,11 @@ const ACTeams = () => {
       sortable: true
     },
     {
+      name: 'Employee name',
+      selector: (row) => row.name,
+      sortable: true
+    },
+    {
       name: 'Category',
       selector: (row) => row.category==='other' ? row.otherCategory : row.category,
       sortable: true
@@ -140,13 +145,9 @@ const ACTeams = () => {
       selector: (row) => row.claimDate,
       sortable: true
     },
+    
     {
-      name: 'AM Status',
-      selector: (row) => row.statusAM? 'Accepted' : 'Rejected',
-      sortable: true
-    },
-    {
-      name: 'HR Status',
+      name: 'Status',
       selector: (row) => row.statusHR? 'Accepted' : 'Rejected',
       sortable: true
     },

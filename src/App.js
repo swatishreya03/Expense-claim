@@ -7,6 +7,7 @@ import AddClaimForm from './components/AddClaimForm';
 import AMDashboard from './components/AccountManagerDashboard';
 import AccountsTeam from './components/AccountsTeam';
 import Topbar from './components/Topbar';
+import Admin from './components/Admin';
 
 
 import './css/AddClaimForm.css';
@@ -27,6 +28,7 @@ const App = () => {
         <Route path="/hr" element={<HRDashboard />} />
         <Route path="/account-manager" element={<AMDashboard />} />
         <Route path="/accounts" element={<AccountsTeam />} />
+        <Route path="/admin" element={<Admin />} />
 
       </Routes>
     </Router>

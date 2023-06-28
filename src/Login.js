@@ -33,6 +33,9 @@ const Login = () => {
             else if (data.role === 'accounts') {
               navigate('/accounts');
             }
+            else if (data.role === 'admin') {
+              navigate('/admin');
+            }
           }
         }).catch((error) => {
           console.log(error);
@@ -59,6 +62,9 @@ const Login = () => {
         }
         else if (data.role === 'accounts') {
           navigate('/accounts');
+        }
+        else if (data.role === 'admin') {
+          navigate('/admin');
         }
       } else {
         toast.error(data.message, {
